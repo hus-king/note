@@ -166,7 +166,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -180,7 +181,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5b686c511c2cd207",
+  "active": "8f801d4f04e02b17",
   "lastOpenFiles": [
     "2025-03-26.md",
     "未命名.canvas",
