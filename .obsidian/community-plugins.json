@@ -1,5 +1,6 @@
 [
   "obsidian-git",
   "convert-katex-to-mathjax",
-  "obsidian-latex-suite"
+  "obsidian-latex-suite",
+  "better-mathjax"
 ]
