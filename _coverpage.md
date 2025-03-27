@@ -1,9 +1,9 @@
 
 <!-- _coverpage.md -->
 
-![logo](_media/icon.svg)
+![logo](_media/avatar.ico)
 
-# Hus_King <small>O.o</small>
+# Hus_King <small>STUDY</small>
 
 > markdown笔记在线预览
 

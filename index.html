@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="icon" type="image/svg+xml" href="_media/icon.svg">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
   <style>
     /* 设置中文字体为华文中宋 */
     body:lang(zh), h1:lang(zh), h2:lang(zh), h3:lang(zh), h4:lang(zh), h5:lang(zh), h6:lang(zh) {
@@ -39,12 +40,22 @@
   <!-- Docsify v4 -->
   <script>
     window.$docsify = {
+      loadNavbar: true,
       loadSidebar: true,
       subMaxLevel: 2,
-      coverpage: true
+      coverpage: true,
+      auto2top: true,
+      logo:'_media/avatar.ico',
+      name: 'Hus_King',
+      nameLink: '/',
+      repo:'https://github.com/hus-king/note'
     }
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+  <!-- 添加对C语言支持的Prism.js组件 -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
   <script src="//cdn.jsdelivr.net/npm/marked@4"></script>
