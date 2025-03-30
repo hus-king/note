@@ -9,4 +9,4 @@
     * [字符串函数](algorithm/string.md)
     * [向量函数](algorithm/vector.md)
 * 你的名字糖完了你
-    * [降龙伏虎](Sach/)
+    * [降龙伏虎](Sach/ITC_homework_2)
