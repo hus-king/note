@@ -5,8 +5,9 @@
     * [数据结构](note/数据结构)
 * 算法相关
     * [算法学习笔记](algorithm/算法学习笔记.md)
+    * [字符串进阶](algorithm/字符串进阶.md)
     * [标准库函数](algorithm/stdc++.md)
     * [字符串函数](algorithm/string.md)
     * [向量函数](algorithm/vector.md)
-* 你的名字糖完了你
+* SKW
     * [降龙伏虎](Sach/ITC_homework_2)
