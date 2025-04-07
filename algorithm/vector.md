@@ -145,11 +145,194 @@ int main() {
 }
 ```
 
+## 7. 有序操作（适用于已排序的 vector）
+
+### 7.1 `std::lower_bound`
+
+**定义**：  
+`std::lower_bound` 返回第一个不小于给定值的元素的迭代器。
+
+**复杂度**：  
+时间复杂度为 $ O(\log n) $，前提是容器已排序。
+
+**语法**：
+```c++
+auto it = std::lower_bound(v.begin(), v.end(), value);
+```
+
+**示例代码**：
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> vec = {1, 2, 4, 4, 5, 6};
+
+    int value = 4;
+    auto it = lower_bound(vec.begin(), vec.end(), value);
+
+    if (it != vec.end()) {
+        cout << "First element not less than " << value << " is at index: " 
+             << distance(vec.begin(), it) << endl;
+    } else {
+        cout << "No such element found." << endl;
+    }
+
+    return 0;
+}
+```
+**输出**：
+```
+First element not less than 4 is at index: 2
+```
+
 ---
 
-## 关键注意事项
+### 7.2 `std::upper_bound`
 
-1.  迭代器失效：插入或删除元素可能导致迭代器、指针或引用失效。
-2.  预分配空间：频繁插入时使用 `reserve()` 减少重新分配次数。
-3.  移动语义：大对象优先用 `emplace_back` 或 `std::move` 避免拷贝。
-4.  越界访问：`[]` 不检查越界，`at()` 安全但性能略低。
+**定义**：  
+`std::upper_bound` 返回第一个大于给定值的元素的迭代器。
+
+**复杂度**：  
+时间复杂度为 $ O(\log n) $，前提是容器已排序。
+
+**语法**：
+```c++
+auto it = std::upper_bound(v.begin(), v.end(), value);
+```
+
+**示例代码**：
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> vec = {1, 2, 4, 4, 5, 6};
+
+    int value = 4;
+    auto it = upper_bound(vec.begin(), vec.end(), value);
+
+    if (it != vec.end()) {
+        cout << "First element greater than " << value << " is at index: " 
+             << distance(vec.begin(), it) << endl;
+    } else {
+        cout << "No such element found." << endl;
+    }
+
+    return 0;
+}
+```
+**输出**：
+```
+First element greater than 4 is at index: 4
+```
+
+---
+
+### 7.3 `std::binary_search`
+
+**定义**：  
+`std::binary_search` 检查给定值是否存在于容器中。
+
+**复杂度**：  
+时间复杂度为 $ O(\log n) $，前提是容器已排序。
+
+**语法**：
+```c++
+bool found = std::binary_search(v.begin(), v.end(), value);
+```
+
+**示例代码**：
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> vec = {1, 2, 4, 4, 5, 6};
+
+    int value = 3;
+    if (binary_search(vec.begin(), vec.end(), value)) {
+        cout << value << " is present in the vector." << endl;
+    } else {
+        cout << value << " is not present in the vector." << endl;
+    }
+
+    return 0;
+}
+```
+**输出**：
+```
+3 is not present in the vector.
+```
+
+---
+
+### 7.4 `std::equal_range`
+
+**定义**：  
+`std::equal_range` 返回一个包含 `lower_bound` 和 `upper_bound` 的迭代器对，表示给定值的范围。
+
+**复杂度**：  
+时间复杂度为 $ O(\log n) $，前提是容器已排序。
+
+**语法**：
+```c++
+auto range = std::equal_range(v.begin(), v.end(), value);
+```
+
+**示例代码**：
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> vec = {1, 2, 4, 4, 5, 6};
+
+    int value = 4;
+    auto range = equal_range(vec.begin(), vec.end(), value);
+
+    cout << "Range of " << value << ": [" 
+         << distance(vec.begin(), range.first) << ", " 
+         << distance(vec.begin(), range.second) << ")" << endl;
+
+    return 0;
+}
+```
+**输出**：
+```
+Range of 4: [2, 4)
+```
+
+---
+
+### 公式总结
+
+- **`lower_bound`**: 返回满足以下条件的最小索引 $ i $:
+  $$
+  \forall j < i, \; v[j] < x
+  $$
+  即找到第一个不小于 $ x $ 的位置。
+
+- **`upper_bound`**: 返回满足以下条件的最小索引 $ i $:
+  $$
+  \forall j < i, \; v[j] \leq x
+  $$
+  即找到第一个大于 $ x $ 的位置。
+
+- **`binary_search`**: 检查是否存在满足以下条件的 $ i $:
+  $$
+  v[i] = x
+  $$
+
+- **`equal_range`**: 返回满足以下条件的区间 $[i, j)$:
+  $$
+  \forall k \in [i, j), \; v[k] = x
+  $$
