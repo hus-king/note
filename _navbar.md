@@ -3,6 +3,7 @@
 * 编程
     * [数据结构](note/数据结构)
     * [算法学习笔记](algorithm/算法学习笔记.md)
+    * [字符串进阶](algorithm/字符串进阶.md)
     * [stdc++](algorithm/stdc++.md)
     * [string](algorithm/string.md)
     * [vector](algorithm/vector.md)

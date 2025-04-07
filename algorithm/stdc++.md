@@ -1,5 +1,7 @@
 # 标准库函数
-
+```cpp
+#include <bits/stdc++.h>
+```
 ## 1. 输入输出函数
 - `<iostream>`：核心输入输出流库
   - `cin >> var`：读取输入数据
