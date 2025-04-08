@@ -1,5 +1,5 @@
 # 标准库函数
-```cpp
+```c
 #include <bits/stdc++.h>
 ```
 ## 1. 输入输出函数
@@ -10,7 +10,7 @@
 - `<iomanip>`：格式化输出
   - `fixed`：固定小数位数显示
   - `setprecision(n)`：设置小数精度
-  ```cpp
+  ```c
   double pi = 3.1415926;
   cout << fixed << setprecision(2) << pi;  // 输出 3.14
   ```
@@ -25,7 +25,7 @@
 - 字符处理函数（需 `<cctype>`）
   - `islower(c)` / `isupper(c)`：判断小写/大写字母
   - `tolower(c)` / `toupper(c)`：大小写转换
-  ```cpp
+  ```c
   char c = 'A';
   cout << (char)tolower(c);  // 输出 'a'
   ```
@@ -47,7 +47,7 @@
 ## 4. 算法函数
 - `<algorithm>`：核心算法库
   - `sort(begin, end)`：排序（默认升序）
-    ```cpp
+    ```c
     vector<int> v = {5, 3, 1};
     sort(v.begin(), v.end());  // 结果 {1, 3, 5}
     ```
@@ -76,13 +76,13 @@
 ## 6. 其他实用函数
 - 内存操作（`<cstring>`）
   - `memset(ptr, val, size)`：填充内存块
-    ```cpp
+    ```c
     int arr[5];
     memset(arr, 0, sizeof(arr));  // 全初始化为0
     ```
 - 全排列（需 `<algorithm>`）
   - `next_permutation(begin, end)`：生成下一个排列
-    ```cpp
+    ```c
     string s = "123";
     do { cout << s << " "; } while (next_permutation(s.begin(), s.end()));
     // 输出 "123 132 213 231 312 321"
@@ -98,7 +98,7 @@
 ---
 
 ## 示例代码（综合使用多个函数）
-```cpp
+```c
 #include <bits/stdc++.h>
 using namespace std;
 
