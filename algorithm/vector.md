@@ -3,14 +3,14 @@
 ## 1. 构造函数与赋值
 
 * 构造函数：
-    ```c++
+    ```c
     vector<int> v1;          // 空 vector
     vector<int> v2(5, 10);     // 5 个元素，每个值为 10
     vector<int> v3 = {1, 2, 3}; // 初始化列表（C++11）
     vector<int> v4(v3);        // 拷贝构造
     ```
 * 赋值 `=` 和 `assign()`：
-    ```c++
+    ```c
     v1 = v2;                  // 复制 v2 的内容
     v1.assign(3, 100);        // 替换内容为 3 个 100
     v1.assign(v3.begin(), v3.end()); // 用迭代器范围赋值
@@ -21,17 +21,17 @@
 ## 2. 元素访问
 
 * 下标访问 `[]` 和 `at()`：
-    ```c++
+    ```c
     int a = v1[0];          // 不检查越界（高效）
     int b = v1.at(0);        // 越界时抛出 `std::out_of_range`
     ```
 * 首尾元素 `front()` 和 `back()`：
-    ```c++
+    ```c
     int first = v1.front(); // 第一个元素
     int last = v1.back();    // 最后一个元素
     ```
 * 底层数组指针 `data()`：
-    ```c++
+    ```c
     int* ptr = v1.data();    // 返回指向底层数组的指针
     ```
 
@@ -40,18 +40,18 @@
 ## 3. 容量操作
 
 * 大小与容量：
-    ```c++
+    ```c
     v1.size();            // 当前元素个数
     v1.empty();           // 是否为空
     v1.capacity();        // 当前分配的存储空间大小
     ```
 * 调整容量 `reserve()` 和 `resize()`：
-    ```c++
+    ```c
     v1.reserve(100);       // 预分配至少 100 个元素的空间（不改变 size）
     v1.resize(10, 5);     // 调整 size 为 10，新增元素初始化为 5
     ```
 * 释放未使用空间 `shrink_to_fit()`（C++11）：
-    ```c++
+    ```c
     v1.shrink_to_fit();   // 减少 capacity 到与 size 匹配（请求，非强制）
     ```
 
@@ -60,28 +60,28 @@
 ## 4. 修改操作
 
 * 添加元素 `push_back()` 和 `emplace_back()`（C++11）：
-    ```c++
+    ```c
     v1.push_back(42);        // 在末尾插入 42（拷贝或移动）
     v1.emplace_back(42);    // 直接在末尾构造元素（更高效）
     ```
 * 插入元素 `insert()`：
-    ```c++
+    ```c
     auto it = v1.begin() + 2;
     v1.insert(it, 99);        // 在位置 2 插入 99
     v1.insert(it, 3, 88);    // 插入 3 个 88
     ```
 * 删除元素 `pop_back()` 和 `erase()`：
-    ```c++
+    ```c
     v1.pop_back();            // 删除最后一个元素
     v1.erase(v1.begin());    // 删除第一个元素
     v1.erase(v1.begin(), v1.begin() + 3); // 删除前 3 个元素
     ```
 * 清空 `clear()`：
-    ```c++
+    ```c
     v1.clear();              // 清空所有元素（size=0，capacity 不变）
     ```
 * 交换 `swap()`：
-    ```c++
+    ```c
     v1.swap(v2);              // 交换两个 vector 的内容
     ```
 
@@ -90,13 +90,13 @@
 ## 5. 迭代器
 
 * 迭代器访问：
-    ```c++
+    ```c
     for (auto it = v1.begin(); it != v1.end(); ++it) {
         cout << *it << " ";
     }
     ```
 * 反向迭代器：
-    ```c++
+    ```c
     for (auto rit = v1.rbegin(); rit != v1.rend(); ++rit) {
         cout << *rit << " ";
     }
@@ -107,11 +107,11 @@
 ## 6. 其他操作
 
 * 比较运算符（`==`, `!=`, `<`, `>` 等）：
-    ```c++
+    ```c
     if (v1 == v2) { ... }    // 按顺序比较元素
     ```
 * 移动语义（C++11）：
-    ```c++
+    ```c
     vector<int> v4 = std::move(v1); // 移动构造（v1 变为空）
     ```
 
@@ -119,7 +119,7 @@
 
 ## 示例代码
 
-```c++
+```c
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -156,12 +156,12 @@ int main() {
 时间复杂度为 $ O(\log n) $，前提是容器已排序。
 
 **语法**：
-```c++
+```c
 auto it = std::lower_bound(v.begin(), v.end(), value);
 ```
 
 **示例代码**：
-```c++
+```c
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -199,12 +199,12 @@ First element not less than 4 is at index: 2
 时间复杂度为 $ O(\log n) $，前提是容器已排序。
 
 **语法**：
-```c++
+```c
 auto it = std::upper_bound(v.begin(), v.end(), value);
 ```
 
 **示例代码**：
-```c++
+```c
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -242,12 +242,12 @@ First element greater than 4 is at index: 4
 时间复杂度为 $ O(\log n) $，前提是容器已排序。
 
 **语法**：
-```c++
+```c
 bool found = std::binary_search(v.begin(), v.end(), value);
 ```
 
 **示例代码**：
-```c++
+```c
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -282,12 +282,12 @@ int main() {
 时间复杂度为 $ O(\log n) $，前提是容器已排序。
 
 **语法**：
-```c++
+```c
 auto range = std::equal_range(v.begin(), v.end(), value);
 ```
 
 **示例代码**：
-```c++
+```c
 #include <iostream>
 #include <vector>
 #include <algorithm>
