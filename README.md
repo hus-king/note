@@ -17,3 +17,5 @@
   - [STL 宝典](/algorithm/stdc++.md)
   - [字符串处理](/algorithm/string.md)
   - [向量容器](/algorithm/vector.md)
+- [⚙️ 技术整理](/tech/)
+  - [VM扩容](tech/vmresize.md)

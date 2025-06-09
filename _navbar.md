@@ -9,3 +9,5 @@
     * [stdc++](algorithm/stdc++.md)
     * [string](algorithm/string.md)
     * [vector](algorithm/vector.md)
+* 技术
+    * [VM扩容](tech/vmresize.md)
