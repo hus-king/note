@@ -19,3 +19,4 @@
   - [向量容器](/algorithm/vector.md)
 - [⚙️ 技术整理](/tech/)
   - [VM扩容](tech/vmresize.md)
+  - [Cifar100](tech/cifar.md)

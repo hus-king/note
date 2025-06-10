@@ -11,3 +11,4 @@
     * [vector](algorithm/vector.md)
 * 技术
     * [VM扩容](tech/vmresize.md)
+    * [Cifar100](tech/cifar.md)
