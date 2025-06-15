@@ -153,7 +153,7 @@ int main() {
 `std::lower_bound` 返回第一个不小于给定值的元素的迭代器。
 
 **复杂度**：  
-时间复杂度为 $ O(\log n) $，前提是容器已排序。
+时间复杂度为 $O(\log n)$，前提是容器已排序。
 
 **语法**：
 ```c
@@ -196,7 +196,7 @@ First element not less than 4 is at index: 2
 `std::upper_bound` 返回第一个大于给定值的元素的迭代器。
 
 **复杂度**：  
-时间复杂度为 $ O(\log n) $，前提是容器已排序。
+时间复杂度为 $O(\log n)$，前提是容器已排序。
 
 **语法**：
 ```c
@@ -239,7 +239,7 @@ First element greater than 4 is at index: 4
 `std::binary_search` 检查给定值是否存在于容器中。
 
 **复杂度**：  
-时间复杂度为 $ O(\log n) $，前提是容器已排序。
+时间复杂度为 $O(\log n)$，前提是容器已排序。
 
 **语法**：
 ```c
@@ -279,7 +279,7 @@ int main() {
 `std::equal_range` 返回一个包含 `lower_bound` 和 `upper_bound` 的迭代器对，表示给定值的范围。
 
 **复杂度**：  
-时间复杂度为 $ O(\log n) $，前提是容器已排序。
+时间复杂度为 $O(\log n)$，前提是容器已排序。
 
 **语法**：
 ```c
@@ -315,19 +315,19 @@ Range of 4: [2, 4)
 
 ### 公式总结
 
-- **`lower_bound`**: 返回满足以下条件的最小索引 $ i $:
+- **`lower_bound`**: 返回满足以下条件的最小索引 $i$:
   $$
   \forall j < i, \; v[j] < x
   $$
-  即找到第一个不小于 $ x $ 的位置。
+  即找到第一个不小于 $x$ 的位置。
 
-- **`upper_bound`**: 返回满足以下条件的最小索引 $ i $:
+- **`upper_bound`**: 返回满足以下条件的最小索引 $i$:
   $$
   \forall j < i, \; v[j] \leq x
   $$
-  即找到第一个大于 $ x $ 的位置。
+  即找到第一个大于 $x$ 的位置。
 
-- **`binary_search`**: 检查是否存在满足以下条件的 $ i $:
+- **`binary_search`**: 检查是否存在满足以下条件的 $i$:
   $$
   v[i] = x
   $$
