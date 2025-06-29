@@ -16,5 +16,6 @@
 * 技术
     * [VM扩容](tech/vmresize.md)
     * [Cifar100](tech/cifar.md)
+    * [测速](tech/net.md)
 * SKW
     * [降龙伏虎](Sach/ITC_homework_2)

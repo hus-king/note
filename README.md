@@ -22,3 +22,4 @@
 - [⚙️ 技术整理](/tech/)
   - [VM扩容](tech/vmresize.md)
   - [Cifar100](tech/cifar.md)
+  - [测速](tech/net.md)
