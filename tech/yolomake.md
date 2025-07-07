@@ -679,6 +679,54 @@ if __name__ == "__main__":
 
 ```
 
+### camera_capture.py
+```python
+import cv2
+import os
+
+# 创建保存图像的文件夹
+save_folder = "images"
+if not os.path.exists(save_folder):
+    os.makedirs(save_folder)
+
+# 打开摄像头（默认设备索引为0）
+cap = cv2.VideoCapture(0)
+
+if not cap.isOpened():
+    print("无法打开摄像头")
+    exit()
+
+print("摄像头已打开。按 'a' 键拍照，输入 'q' 退出程序。")
+
+count = 1  # 图片计数器
+
+while True:
+    # 读取一帧画面
+    ret, frame = cap.read()
+    if not ret:
+        print("无法读取画面")
+        break
+
+    # 显示画面（可选）
+    cv2.imshow("Camera", frame)
+
+    # 等待键盘输入
+    key = cv2.waitKey(1)
+
+    if key == ord('a'):  # 当按下 'a' 键时拍照
+        filename = os.path.join(save_folder, f"image_{count:04d}.jpg")
+        cv2.imwrite(filename, frame)
+        print(f"已保存照片：{filename}")
+        count += 1
+
+    elif key == ord('q'):  # 按 q 键退出
+        print("退出程序")
+        break
+
+# 释放资源
+cap.release()
+cv2.destroyAllWindows()
+```
 ## 功能描述
 本工具可对 images 文件夹下所有 jpg 图像进行批量旋转（360次，每次1°），并为每张图像手动打标，自动生成YOLO格式标签，类别ID从0递增。支持旋转后标签同步变换。可配合 yolo_visualizer.py 可视化旋转结果。
 
@@ -690,10 +738,11 @@ if __name__ == "__main__":
 ```bash
 python image_rotator.py
 ```
-- 选择“1. 直接开始旋转所有图像（包括标签选择）”。
+- 按提示为每张图像输入类别名称（默认使用图片文件名，可直接回车使用）。
 - 按提示为每张图像用鼠标点击两个对角点，定义目标物体的边界框。
 - 每张图像会自动分配一个类别ID（从0递增）。
 - 工具会自动对每张图像生成360个旋转版本及对应标签。
+- 自动生成 classes.txt 文件，包含所有类别名称。
 
 ### 2. 可视化旋转结果
 - 运行：
@@ -702,27 +751,29 @@ python yolo_visualizer.py
 ```
 - 选择旋转结果文件夹，可按角度采样或自定义角度查看旋转效果和标签。
 
-## 输出文件结构
+### 类别ID和类别名称规则
+
+1. **类别ID分配**：
+   - 第一个图像：类别ID = 0
+   - 第二个图像：类别ID = 1
+   - 依此类推...
+
+2. **类别名称规则**：
+   - **默认行为**：自动使用图片文件名（去掉.jpg扩展名）作为类别名称
+   - 例如：`cammel_1.jpg` → 默认类别名为 `cammel_1`
+
+### 输出文件结构
 ```
-images/
-├── image1.jpg                    # 原始图像1 (类别ID: 0)
-├── image1.txt                    # 原始YOLO标签1
-├── image1_rotations/             # 旋转结果文件夹1
-│   ├── image1_000deg.jpg         # 旋转0°图像
-│   ├── image1_000deg.txt         # 旋转0°标签 (类别ID: 0)
-│   ├── image1_001deg.jpg         # 旋转1°图像
-│   ├── image1_001deg.txt         # 旋转1°标签 (类别ID: 0)
-│   └── ...                       # 其他旋转角度
-├── image2.jpg                    # 原始图像2 (类别ID: 1)
-├── image2.txt                    # 原始YOLO标签2
-├── image2_rotations/             # 旋转结果文件夹2
-│   ├── image2_000deg.jpg         # 旋转0°图像
-│   ├── image2_000deg.txt         # 旋转0°标签 (类别ID: 1)
-│   └── ...                       # 其他旋转角度
-└── ...                           # 其他图像和文件夹
+output/
+├── cammel_1_000.jpg            # 旋转0°图像
+├── cammel_1_000.txt            # 旋转0°标签 (类别ID: 1)
+├── cammel_1_001.jpg            # 旋转1°图像
+├── cammel_1_001.txt            # 旋转1°标签 (类别ID: 1)
+├── ...                         # cammel_1的其他旋转角度
+└── classes.txt                 # YOLO类别名称文件
 ```
 
-## YOLO标签格式
+### YOLO标签格式
 每个标签文件一行：
 ```
 class_id center_x center_y width height
@@ -730,18 +781,25 @@ class_id center_x center_y width height
 - class_id：类别ID（从0递增）
 - center_x, center_y, width, height：均为归一化（0-1）
 
-## 注意事项
-- 每张图像会生成360个旋转版本，请确保磁盘空间充足。
-- 类别ID自动分配，顺序与images文件夹下jpg文件顺序一致。
-- 标注时请确保框选完整目标。
-- 支持任意jpg图片批量处理。
+## classes.txt格式
+每行一个类别名称，行号对应类别ID：
+```
+cammel_1
+person
+car
+...
+```
+- 第0行对应类别ID 0（background）
+- 第1行对应类别ID 1（cammel_1）
+- 依此类推
 
-## 依赖
-- Python 3.x
-- opencv-python
-- numpy
 
 ## 示例流程
-1. 将图片放入 images/
-2. 运行 python image_rotator.py，依次打标
-3. 运行 python yolo_visualizer.py 检查旋转与标签效果
+1. 将图片放入 images/ 文件夹
+   - 例如：`cammel_1.jpg`
+2. 运行 `python image_rotator.py`
+3. 对于每张图像：
+   - 输入类别名称（可直接回车使用默认名称）
+   - 用鼠标点击两个对角点进行标注
+4. 自动生成classes.txt和所有旋转图像及标签
+5. 运行 `python yolo_visualizer.py` 检查旋转与标签效果
