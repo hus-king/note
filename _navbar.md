@@ -15,6 +15,7 @@
     * [VM扩容](tech/vmresize.md)
     * [Cifar100](tech/cifar.md)
     * [测速](tech/net.md)
+    * [Yolo快速打标](tech/yolomake.md)
 * 无人机
     * [精英赛——任务挑战](uav/精英赛——任务挑战.md)
     * [精英赛——物流搬运](uav/精英赛——物流搬运.md)
