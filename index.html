@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="icon" type="image/svg+xml" href="_media/icon.svg">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/style.min.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <style>
     /* 设置中文字体为华文中宋 */
     body:lang(zh), h1:lang(zh), h2:lang(zh), h3:lang(zh), h4:lang(zh), h5:lang(zh), h6:lang(zh) {
@@ -42,25 +44,54 @@
     window.$docsify = {
       loadNavbar: true,
       loadSidebar: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+      },
       subMaxLevel: 2,
+      sidebarDisplayLevel: 1, // 设置侧边栏默认展开层级
       coverpage: true,
       auto2top: true,
       logo: '_media/avatar.ico',
       name: 'Hus_King',
       nameLink: '/',
       repo: 'https://github.com/hus-king/note',
-      search: {
-        // insertAfter: '.app-name',
-        // insertBefore: '.sidebar-nav',
-        noData: {
-          '/': 'No results!',
+      themeColor: '#42b983', // 设置主题色，保证切换按钮可见
+      darkMode: {
+        dark: {
+          background: '#1c2022',
+          toggleBtnBg: '#34495e',
+          textColor: '#b4b4b4'
         },
-        placeholder: '搜索',
+        light: {
+          background: 'white',
+          toggleBtnBg: 'var(--theme-color)',
+          textColor: 'var(--theme-color)'
+        }
+      },
+      search: {
+        maxAge: 86400000, // 缓存一天
+        paths: [], // 或 'auto'，可自定义搜索范围
+        placeholder: {
+          '/zh-cn/': '搜索',
+          '/': 'Type to search',
+        },
+        noData: {
+          '/zh-cn/': '找不到结果',
+          '/': 'No Results',
+        },
+        depth: 2, // 标题深度
+        hideOtherSidebarContent: false,
+        namespace: 'website-1',
+        pathNamespaces: ['/zh-cn', '/ru-ru', '/ru-ru/v1'],
+        // 也可用正则
+        // pathNamespaces: /^(\/(zh-cn|ru-ru))?(\/(v1|v2))?/
       },
     }
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+  <script src="//unpkg.com/docsify-pdf-embed-plugin/src/docsify-pdf-embed.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
@@ -72,6 +103,8 @@
   <script src="//cdn.jsdelivr.net/npm/marked@4"></script>
   <!-- CDN files for docsify-katex -->
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/index.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
 </body>
 </html>
 
