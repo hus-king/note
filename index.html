@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="icon" type="image/svg+xml" href="_media/icon.svg">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/style.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <style>
     /* 设置中文字体为华文中宋 */
@@ -56,18 +55,6 @@
       nameLink: '/',
       repo: 'https://github.com/hus-king/note',
       themeColor: '#42b983', // 设置主题色，保证切换按钮可见
-      darkMode: {
-        dark: {
-          background: '#1c2022',
-          toggleBtnBg: '#34495e',
-          textColor: '#b4b4b4'
-        },
-        light: {
-          background: 'white',
-          toggleBtnBg: 'var(--theme-color)',
-          textColor: 'var(--theme-color)'
-        }
-      },
       search: {
         maxAge: 86400000, // 缓存一天
         paths: [], // 或 'auto'，可自定义搜索范围
@@ -108,9 +95,9 @@
   <script src="//cdn.jsdelivr.net/npm/marked@4"></script>
   <!-- CDN files for docsify-katex -->
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-dark-mode@latest/dist/index.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
+  <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
 </body>
 </html>
 
