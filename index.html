@@ -57,7 +57,7 @@
       themeColor: '#42b983', // 设置主题色，保证切换按钮可见
       search: {
         maxAge: 86400000, // 缓存一天
-        paths: [], // 或 'auto'，可自定义搜索范围
+        paths: 'auto', // 自动索引所有页面，实现全文搜索
         placeholder: {
           '/zh-cn/': '搜索',
           '/': 'Type to search',
@@ -66,7 +66,7 @@
           '/zh-cn/': '找不到结果',
           '/': 'No Results',
         },
-        depth: 2, // 标题深度
+        depth: 4, // 标题深度
         hideOtherSidebarContent: false,
         namespace: 'website-1',
         pathNamespaces: ['/zh-cn', '/ru-ru', '/ru-ru/v1'],
