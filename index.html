@@ -35,14 +35,241 @@
     .sidebar {
       font-family: "华文中宋", "STZhongsong", serif !important;
     }
+    
+    /* 白天黑夜切换按钮样式 */
+    * {
+      transition: 0.7s;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -35em;
+      margin-left: -90em;
+      width: 180em;
+      height: 70em;
+      display: inline-block;
+      vertical-align: bottom;
+      transform: translate3d(0, 0, 0);
+    }
+    
+    .container .components {
+      position: fixed;
+      width: 180em;
+      height: 70em;
+      background-color: #4685c0;
+      border-radius: 100em;
+      box-shadow: inset 0 0 5em 3em rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      transition: 0.7s;
+      transition-timing-function: cubic-bezier(0, 0.5, 1, 1);
+      cursor: pointer;
+    }
+    
+    .container .main-button {
+      margin: 7.5em 0 0 7.5em;
+      width: 55em;
+      height: 55em;
+      background-color: #ffc323;
+      border-radius: 50%;
+      box-shadow: 3em 3em 5em rgba(0, 0, 0, 0.5),
+        inset -3em -5em 3em -3em rgba(0, 0, 0, 0.5), inset 4em 5em 2em -2em #ffe650;
+      transition: 1s;
+      transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
+    }
+    
+    .container .moon {
+      position: absolute;
+      background-color: #96a0b4;
+      box-shadow: inset 0em 0em 1em 1em rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      transition: 0.5s;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+    
+    .container .moon:nth-child(1) {
+      top: 7.5em;
+      left: 25em;
+      width: 12.5em;
+      height: 12.5em;
+    }
+    
+    .container .moon:nth-child(2) {
+      top: 20em;
+      left: 7.5em;
+      width: 20em;
+      height: 20em;
+    }
+    
+    .container .moon:nth-child(3) {
+      top: 32.5em;
+      left: 32.5em;
+      width: 12.5em;
+      height: 12.5em;
+    }
+    
+    .container .cloud,
+    .container .cloud-light {
+      transform: translateY(10em);
+      transition: 1s;
+      transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
+    }
+    
+    .container .cloud-son {
+      position: absolute;
+      background-color: #fff;
+      border-radius: 50%;
+      z-index: -1;
+      transition: transform 6s, right 1s, bottom 1s;
+    }
+    
+    .container .stars {
+      transform: translateY(-125em);
+      z-index: -2;
+      transition: 1s;
+      transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
+    }
+    
+    .container .big {
+      --size: 7em;
+    }
+    
+    .container .medium {
+      --size: 5em;
+    }
+    
+    .container .small {
+      --size: 3em;
+    }
+    
+    .container .star {
+      position: absolute;
+      width: calc(2 * var(--size));
+      height: calc(2 * var(--size));
+    }
+    
+    .container .star-son {
+      float: left;
+      width: var(--size);
+      height: var(--size);
+      background-image: radial-gradient(
+        circle var(--size) at var(--pos),
+        transparent calc(95% - 1px),
+        #fff 95%
+      );
+    }
+    
+    /* 深色模式状态 */
+    [data-theme="dark"] .container .components {
+      background-color: #191e32;
+    }
+    
+    [data-theme="dark"] .container .main-button {
+      transform: translateX(110em);
+      background-color: #c3c8d2;
+      box-shadow: 3em 3em 5em rgba(0, 0, 0, 0.5),
+        inset -3em -5em 3em -3em rgba(0, 0, 0, 0.5),
+        inset 4em 5em 2em -2em white;
+    }
+    
+    [data-theme="dark"] .container .moon:nth-child(1) {
+      opacity: 1;
+      filter: alpha(opacity=100);
+    }
+    
+    [data-theme="dark"] .container .moon:nth-child(2) {
+      opacity: 1;
+      filter: alpha(opacity=100);
+    }
+    
+    [data-theme="dark"] .container .moon:nth-child(3) {
+      opacity: 1;
+      filter: alpha(opacity=100);
+    }
+    
+    [data-theme="dark"] .container .cloud,
+    [data-theme="dark"] .container .cloud-light {
+      transform: translateY(140em);
+    }
+    
+    [data-theme="dark"] .container .stars {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
   <div id="app"></div>
   
-  <!-- 添加自定义的白天黑夜切换按钮容器 -->
-  <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
-    <toggle-button id="customThemeToggle"></toggle-button>
+  <!-- 添加白天黑夜切换按钮 -->
+  <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; transform: scale(0.2);">
+    <div class="container">
+      <div class="components">
+        <div class="main-button"></div>
+        <div class="moon"></div>
+        <div class="moon"></div>
+        <div class="moon"></div>
+        <div class="daytime-backgrond"></div>
+        <div class="daytime-backgrond"></div>
+        <div class="daytime-backgrond"></div>
+        <div class="cloud">
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+        </div>
+        <div class="cloud-light">
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+          <div class="cloud-son"></div>
+        </div>
+        <div class="stars">
+          <div class="star small">
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+          </div>
+          <div class="star medium">
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+          </div>
+          <div class="star small">
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+          </div>
+          <div class="star big">
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+          </div>
+          <div class="star medium">
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+          </div>
+          <div class="star small">
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+            <div class="star-son"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <!-- Docsify v4 -->
@@ -125,96 +352,20 @@
   <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-terminal-block@1.0.3"></script>
   
-  <!-- 自定义的白天黑夜切换按钮Web Component实现 -->
+  <!-- 白天黑夜切换按钮实现 -->
   <script>
-    class DayNightToggleButton extends HTMLElement {
-      constructor() {
-        super();
-        // 获取当前主题状态
-        this.isDark = document.body.classList.contains('darkMode');
-        this.render();
-        this.setupEventListeners();
-      }
-
-      render() {
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-          <style>
-            .toggle-button {
-              width: 60px;
-              height: 30px;
-              background-color: #f5f5f5;
-              border-radius: 15px;
-              display: flex;
-              align-items: center;
-              cursor: pointer;
-              position: relative;
-              transition: background-color 0.3s ease;
-              border: 2px solid #ddd;
-            }
-            
-            .toggle-button.dark {
-              background-color: #333;
-              border-color: #666;
-            }
-            
-            .toggle-indicator {
-              width: 26px;
-              height: 26px;
-              border-radius: 50%;
-              background-color: #fff;
-              box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-              position: absolute;
-              left: 2px;
-              transition: all 0.3s ease;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              overflow: hidden;
-            }
-            
-            .toggle-button.dark .toggle-indicator {
-              left: 32px;
-              background-color: #ffdb4a;
-            }
-            
-            .sun, .moon {
-              position: absolute;
-              transition: opacity 0.3s ease;
-            }
-            
-            .sun {
-              color: #ffdb4a;
-              opacity: ${this.isDark ? 0 : 1};
-            }
-            
-            .moon {
-              color: #fff;
-              opacity: ${this.isDark ? 1 : 0};
-            }
-            
-            .toggle-button.dark .sun {
-              opacity: 0;
-            }
-            
-            .toggle-button.dark .moon {
-              opacity: 1;
-            }
-          </style>
-          <div class="toggle-button ${this.isDark ? 'dark' : ''}">
-            <div class="toggle-indicator">
-              <span class="sun">☀️</span>
-              <span class="moon">🌙</span>
-            </div>
-          </div>
-        `;
-      }
-
-      setupEventListeners() {
-        const button = this.shadowRoot.querySelector('.toggle-button');
-        button.addEventListener('click', () => {
-          this.isDark = !this.isDark;
-          button.classList.toggle('dark');
+    document.addEventListener('DOMContentLoaded', function() {
+      // 设置初始主题
+      const currentTheme = localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light';
+      document.body.setAttribute('data-theme', currentTheme);
+      
+      // 添加按钮点击事件
+      const BUTTON = document.querySelector(".components");
+      if (BUTTON) {
+        BUTTON.addEventListener("click", function() {
+          // 切换主题状态
+          const willChangeMode = document.body.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          document.body.setAttribute("data-theme", willChangeMode);
           
           // 触发原有的darklight主题切换按钮点击事件
           const darklightBtn = document.querySelector('.darkmode-toggle');
@@ -222,35 +373,21 @@
             darklightBtn.click();
           }
         });
-        
-        // 监听body类变化来同步按钮状态
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-              const isDarkMode = document.body.classList.contains('darkMode');
-              const buttonElem = this.shadowRoot.querySelector('.toggle-button');
-              if (isDarkMode !== this.isDark) {
-                this.isDark = isDarkMode;
-                if (isDarkMode) {
-                  buttonElem.classList.add('dark');
-                } else {
-                  buttonElem.classList.remove('dark');
-                }
-              }
-            }
-          });
-        });
-        
-        observer.observe(document.body, { attributes: true });
       }
-    }
-
-    // 注册Web Component
-    customElements.define('toggle-button', DayNightToggleButton);
-    
-    // 将原始切换按钮隐藏
-    document.addEventListener('DOMContentLoaded', () => {
-      // 等待原按钮加载
+      
+      // 同步状态：当原主题切换器改变主题时，更新我们的按钮状态
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'class') {
+            const isDarkMode = document.body.classList.contains('darkMode');
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+          }
+        });
+      });
+      
+      observer.observe(document.body, { attributes: true });
+      
+      // 隐藏原始切换按钮
       setTimeout(() => {
         const originalToggleBtn = document.querySelector('.darkmode-toggle');
         if (originalToggleBtn) {
