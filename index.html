@@ -6,11 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" id="theme-css">
   <link rel="icon" type="image/svg+xml" href="_media/icon.svg">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css" title="docsify-darklight-theme" type="text/css" />
+  
+  <!-- 添加黑暗模式CSS但默认不启用 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css" id="dark-theme-css" disabled="true">
   <style>
     /* 设置中文字体为华文中宋 */
     body:lang(zh), h1:lang(zh), h2:lang(zh), h3:lang(zh), h4:lang(zh), h5:lang(zh), h6:lang(zh) {
@@ -39,6 +41,11 @@
 </head>
 <body>
   <div id="app"></div>
+  <!-- 添加自定义的白天黑夜切换按钮 -->
+  <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+    <toggle-button id="themeToggle"></toggle-button>
+  </div>
+  
   <!-- Docsify v4 -->
   <script>
     window.$docsify = {
@@ -74,21 +81,8 @@
       //   pathNamespaces: ['/zh-cn', '/ru-ru', '/ru-ru/v1'],
       // },
       
-      // 添加深色模式支持
-      darklightTheme: {
-        siteFont: 'Source Sans Pro,Helvetica Neue,Arial,sans-serif',
-        defaultTheme: 'light',
-        dark: {
-          background: '#1c2022',
-          toggleBtnBg: '#34495e',
-          textColor: '#b4b4b4'
-        },
-        light: {
-          background: 'white',
-          toggleBtnBg: 'var(--theme-color)',
-          textColor: 'var(--text-color-base)'
-        }
-      },
+      // 自定义主题设置
+      executeScript: true, // 允许执行页面上的脚本
       progress: {
         position: 'top',
         color: 'var(--theme-color,#42b983)',
@@ -103,7 +97,6 @@
   <!-- 注释掉搜索插件 -->
   <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script> -->
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/index.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
@@ -118,8 +111,137 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
   <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-terminal-block@1.0.3"></script>
+  
+  <!-- 自定义的白天黑夜切换按钮Web Component实现 -->
+  <script>
+    class DayNightToggleButton extends HTMLElement {
+      constructor() {
+        super();
+        this.isDark = localStorage.getItem('darkTheme') === 'true';
+        this.render();
+        this.setupEventListeners();
+        this.applyTheme();
+      }
+
+      render() {
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+          <style>
+            .toggle-button {
+              width: 60px;
+              height: 30px;
+              background-color: #f5f5f5;
+              border-radius: 15px;
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              position: relative;
+              transition: background-color 0.3s ease;
+              border: 2px solid #ddd;
+            }
+            
+            .toggle-button.dark {
+              background-color: #333;
+              border-color: #666;
+            }
+            
+            .toggle-indicator {
+              width: 26px;
+              height: 26px;
+              border-radius: 50%;
+              background-color: #fff;
+              box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+              position: absolute;
+              left: 2px;
+              transition: all 0.3s ease;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+            }
+            
+            .toggle-button.dark .toggle-indicator {
+              left: 32px;
+              background-color: #ffdb4a;
+            }
+            
+            .sun, .moon {
+              position: absolute;
+              transition: opacity 0.3s ease;
+            }
+            
+            .sun {
+              color: #ffdb4a;
+              opacity: ${this.isDark ? 0 : 1};
+            }
+            
+            .moon {
+              color: #fff;
+              opacity: ${this.isDark ? 1 : 0};
+            }
+            
+            .toggle-button.dark .sun {
+              opacity: 0;
+            }
+            
+            .toggle-button.dark .moon {
+              opacity: 1;
+            }
+          </style>
+          <div class="toggle-button ${this.isDark ? 'dark' : ''}">
+            <div class="toggle-indicator">
+              <span class="sun">☀️</span>
+              <span class="moon">🌙</span>
+            </div>
+          </div>
+        `;
+      }
+
+      setupEventListeners() {
+        const button = this.shadowRoot.querySelector('.toggle-button');
+        button.addEventListener('click', () => {
+          this.isDark = !this.isDark;
+          localStorage.setItem('darkTheme', this.isDark);
+          button.classList.toggle('dark');
+          this.applyTheme();
+        });
+      }
+
+      applyTheme() {
+        const lightTheme = document.getElementById('theme-css');
+        const darkTheme = document.getElementById('dark-theme-css');
+        
+        if (this.isDark) {
+          lightTheme.disabled = true;
+          darkTheme.disabled = false;
+          document.body.classList.add('dark-theme');
+        } else {
+          lightTheme.disabled = false;
+          darkTheme.disabled = true;
+          document.body.classList.remove('dark-theme');
+        }
+      }
+    }
+
+    // 注册Web Component
+    customElements.define('toggle-button', DayNightToggleButton);
+
+    // 初始化主题
+    document.addEventListener('DOMContentLoaded', () => {
+      const isDark = localStorage.getItem('darkTheme') === 'true';
+      const lightTheme = document.getElementById('theme-css');
+      const darkTheme = document.getElementById('dark-theme-css');
+      
+      if (isDark) {
+        lightTheme.disabled = true;
+        darkTheme.disabled = false;
+        document.body.classList.add('dark-theme');
+      } else {
+        lightTheme.disabled = false;
+        darkTheme.disabled = true;
+        document.body.classList.remove('dark-theme');
+      }
+    });
+  </script>
 </body>
 </html>
-
-
-
