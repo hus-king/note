@@ -36,27 +36,27 @@
       font-family: "华文中宋", "STZhongsong", serif !important;
     }
     
-    /* 白天黑夜切换按钮样式 */
+    /* 白天黑夜切换按钮精简版样式 */
     * {
       transition: 0.7s;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
     
-    .container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-top: -35em;
-      margin-left: -90em;
-      width: 180em;
-      height: 70em;
-      display: inline-block;
-      vertical-align: bottom;
-      transform: translate3d(0, 0, 0);
+    body[data-theme="dark"] {
+      background-color: #1c2022; 
     }
     
-    .container .components {
+    .theme-toggle-container {
       position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      font-size: 5px;
+      transform: scale(0.5);
+    }
+    
+    .components {
+      position: relative;
       width: 180em;
       height: 70em;
       background-color: #4685c0;
@@ -68,57 +68,91 @@
       cursor: pointer;
     }
     
-    .container .main-button {
+    .main-button {
       margin: 7.5em 0 0 7.5em;
       width: 55em;
       height: 55em;
       background-color: #ffc323;
       border-radius: 50%;
       box-shadow: 3em 3em 5em rgba(0, 0, 0, 0.5),
-        inset -3em -5em 3em -3em rgba(0, 0, 0, 0.5), inset 4em 5em 2em -2em #ffe650;
+        inset -3em -5em 3em -3em rgba(0, 0, 0, 0.5), 
+        inset 4em 5em 2em -2em #ffe650;
       transition: 1s;
       transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
     }
     
-    .container .moon {
+    .moon {
       position: absolute;
       background-color: #96a0b4;
       box-shadow: inset 0em 0em 1em 1em rgba(0, 0, 0, 0.3);
       border-radius: 50%;
       transition: 0.5s;
       opacity: 0;
-      filter: alpha(opacity=0);
     }
     
-    .container .moon:nth-child(1) {
+    .moon:nth-child(1) {
       top: 7.5em;
       left: 25em;
       width: 12.5em;
       height: 12.5em;
     }
     
-    .container .moon:nth-child(2) {
+    .moon:nth-child(2) {
       top: 20em;
       left: 7.5em;
       width: 20em;
       height: 20em;
     }
     
-    .container .moon:nth-child(3) {
+    .moon:nth-child(3) {
       top: 32.5em;
       left: 32.5em;
       width: 12.5em;
       height: 12.5em;
     }
     
-    .container .cloud,
-    .container .cloud-light {
+    .daytime-backgrond {
+      position: absolute;
+      border-radius: 50%;
+      transition: 1s;
+      transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
+    }
+    
+    .daytime-backgrond:nth-child(2) {
+      top: -20em;
+      left: -20em;
+      width: 110em;
+      height: 110em;
+      background-color: rgba(255, 255, 255, 0.2);
+      z-index: -2;
+    }
+    
+    .daytime-backgrond:nth-child(3) {
+      top: -32.5em;
+      left: -17.5em;
+      width: 135em;
+      height: 135em;
+      background-color: rgba(255, 255, 255, 0.1);
+      z-index: -3;
+    }
+    
+    .daytime-backgrond:nth-child(4) {
+      top: -45em;
+      left: -15em;
+      width: 160em;
+      height: 160em;
+      background-color: rgba(255, 255, 255, 0.05);
+      z-index: -4;
+    }
+    
+    .cloud,
+    .cloud-light {
       transform: translateY(10em);
       transition: 1s;
       transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
     }
     
-    .container .cloud-son {
+    .cloud-son {
       position: absolute;
       background-color: #fff;
       border-radius: 50%;
@@ -126,274 +160,531 @@
       transition: transform 6s, right 1s, bottom 1s;
     }
     
-    .container .stars {
+    .cloud-son:nth-child(6n + 1) {
+      right: -20em;
+      bottom: 10em;
+      width: 50em;
+      height: 50em;
+    }
+    
+    .cloud-son:nth-child(6n + 2) {
+      right: -10em;
+      bottom: -25em;
+      width: 60em;
+      height: 60em;
+    }
+    
+    .cloud-son:nth-child(6n + 3) {
+      right: 20em;
+      bottom: -40em;
+      width: 60em;
+      height: 60em;
+    }
+    
+    .cloud-son:nth-child(6n + 4) {
+      right: 50em;
+      bottom: -35em;
+      width: 60em;
+      height: 60em;
+    }
+    
+    .cloud-son:nth-child(6n + 5) {
+      right: 75em;
+      bottom: -60em;
+      width: 75em;
+      height: 75em;
+    }
+    
+    .cloud-son:nth-child(6n + 6) {
+      right: 110em;
+      bottom: -50em;
+      width: 60em;
+      height: 60em;
+    }
+    
+    .cloud {
+      z-index: -2;
+    }
+    
+    .cloud-light {
+      position: absolute;
+      right: 0em;
+      bottom: 25em;
+      opacity: 0.5;
+      z-index: -3;
+    }
+    
+    .stars {
       transform: translateY(-125em);
       z-index: -2;
       transition: 1s;
       transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
     }
     
-    .container .big {
+    .big {
       --size: 7em;
     }
     
-    .container .medium {
+    .medium {
       --size: 5em;
     }
     
-    .container .small {
+    .small {
       --size: 3em;
     }
     
-    .container .star {
+    .star {
       position: absolute;
       width: calc(2 * var(--size));
       height: calc(2 * var(--size));
     }
     
-    .container .star-son {
-      float: left;
-      width: var(--size);
-      height: var(--size);
-      background-image: radial-gradient(
-        circle var(--size) at var(--pos),
-        transparent calc(95% - 1px),
-        #fff 95%
-      );
+    .star:nth-child(1) {
+      top: 11em;
+      left: 39em;
     }
     
-    /* 深色模式状态 */
-    [data-theme="dark"] .container .components {
+    .star:nth-child(2) {
+      top: 39em;
+      left: 91em;
+    }
+    
+    .star:nth-child(3) {
+      top: 26em;
+      left: 19em;
+    }
+    
+    .star:nth-child(4) {
+      top: 37em;
+      left: 66em;
+    }
+    
+    .star:nth-child(5) {
+      top: 21em;
+      left: 75em;
+    }
+    
+    .star:nth-child(6) {
+      top: 51em;
+      left: 38em;
+    }
+    
+    .star-son {
+      float: left;
+    }
+    
+    .star-son:nth-child(1) {
+      --pos: left 0;
+    }
+    
+    .star-son:nth-child(2) {
+      --pos: right 0;
+    }
+    
+    .star-son:nth-child(3) {
+      --pos: 0 bottom;
+    }
+    
+    .star-son:nth-child(4) {
+      --pos: right bottom;
+    }
+    
+    .star-son {
+      width: var(--size);
+      height: var(--size);
+      background-image: radial-gradient();
+    }
+    
+    .components .main-button:hover {
+      transform: translateX(10em);
+    }
+    
+    .components .main-button:hover ~ .daytime-backgrond:nth-child(2) {
+      transform: translateX(10em);
+    }
+    
+    .components .main-button:hover ~ .daytime-backgrond:nth-child(3) {
+      transform: translateX(7em);
+    }
+    
+    .components .main-button:hover ~ .daytime-backgrond:nth-child(4) {
+      transform: translateX(4em);
+    }
+    
+    .components .main-button:hover ~ .cloud .cloud-son:nth-child(1) {
+      right: -24em;
+      bottom: 10em;
+    }
+    
+    .components .main-button:hover ~ .cloud .cloud-son:nth-child(2) {
+      right: -12em;
+      bottom: -27em;
+    }
+    
+    .components .main-button:hover ~ .cloud .cloud-son:nth-child(3) {
+      right: 17em;
+      bottom: -43em;
+    }
+    
+    .components .main-button:hover ~ .cloud .cloud-son:nth-child(4) {
+      right: 46em;
+      bottom: -39em;
+    }
+    
+    .components .main-button:hover ~ .cloud .cloud-son:nth-child(5) {
+      right: 70em;
+      bottom: -65em;
+    }
+    
+    .components .main-button:hover ~ .cloud .cloud-son:nth-child(6) {
+      right: 109em;
+      bottom: -54em;
+    }
+    
+    .components .main-button:hover ~ .cloud-light .cloud-son:nth-child(1) {
+      right: -23em;
+      bottom: 10em;
+    }
+    
+    .components .main-button:hover ~ .cloud-light .cloud-son:nth-child(2) {
+      right: -11em;
+      bottom: -26em;
+    }
+    
+    .components .main-button:hover ~ .cloud-light .cloud-son:nth-child(3) {
+      right: 18em;
+      bottom: -42em;
+    }
+    
+    .components .main-button:hover ~ .cloud-light .cloud-son:nth-child(4) {
+      right: 47em;
+      bottom: -38em;
+    }
+    
+    .components .main-button:hover ~ .cloud-light .cloud-son:nth-child(5) {
+      right: 74em;
+      bottom: -64em;
+    }
+    
+    .components .main-button:hover ~ .cloud-light .cloud-son:nth-child(6) {
+      right: 110em;
+      bottom: -55em;
+    }
+    
+    [data-theme="light"] .cloud-son {
+      transform: scale(1);
+      transition-timing-function: cubic-bezier(0.56, 1.35, 0.52, 1);
+      transition: 1s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      animation-timing-function: ease-in-out;
+    }
+    
+    [data-theme="light"] .cloud-son:nth-child(6n + 1) {
+      animation-name: naoCloud;
+      animation-duration: 4.5s;
+    }
+    
+    [data-theme="light"] .cloud-son:nth-child(6n + 2) {
+      animation-name: naoCloud;
+      animation-duration: 5.1s;
+    }
+    
+    [data-theme="light"] .cloud-son:nth-child(6n + 3) {
+      animation-name: naoCloud;
+      animation-duration: 5.9s;
+    }
+    
+    [data-theme="light"] .cloud-son:nth-child(6n + 4) {
+      animation-name: naoCloud;
+      animation-duration: 6.3s;
+    }
+    
+    [data-theme="light"] .cloud-son:nth-child(6n + 5) {
+      animation-name: naoCloud;
+      animation-duration: 4.7s;
+    }
+    
+    [data-theme="light"] .cloud-son:nth-child(6n + 6) {
+      animation-name: naoCloud;
+      animation-duration: 5s;
+    }
+    
+    [data-theme="dark"] .components {
       background-color: #191e32;
     }
     
-    [data-theme="dark"] .container .main-button {
+    [data-theme="dark"] .main-button {
       transform: translateX(110em);
       background-color: #c3c8d2;
       box-shadow: 3em 3em 5em rgba(0, 0, 0, 0.5),
         inset -3em -5em 3em -3em rgba(0, 0, 0, 0.5),
-        inset 4em 5em 2em -2em white;
+        inset 4em 5em 2em -2em #c3cddf;
     }
     
-    [data-theme="dark"] .container .moon:nth-child(1) {
+    [data-theme="dark"] .moon {
       opacity: 1;
-      filter: alpha(opacity=100);
     }
     
-    [data-theme="dark"] .container .moon:nth-child(2) {
-      opacity: 1;
-      filter: alpha(opacity=100);
+    [data-theme="dark"] .daytime-backgrond:nth-child(2) {
+      transform: translateX(75em);
     }
     
-    [data-theme="dark"] .container .moon:nth-child(3) {
-      opacity: 1;
-      filter: alpha(opacity=100);
+    [data-theme="dark"] .daytime-backgrond:nth-child(3) {
+      transform: translateX(70em);
     }
     
-    [data-theme="dark"] .container .cloud,
-    [data-theme="dark"] .container .cloud-light {
-      transform: translateY(140em);
+    [data-theme="dark"] .daytime-backgrond:nth-child(4) {
+      transform: translateX(65em);
     }
     
-    [data-theme="dark"] .container .stars {
+    [data-theme="dark"] .cloud,
+    [data-theme="dark"] .cloud-light {
+      transform: translateY(200em);
+    }
+    
+    [data-theme="dark"] .stars {
       transform: translateY(0);
+    }
+    
+    [data-theme="dark"] .star {
+      animation: naoStar 2s infinite alternate;
+    }
+    
+    [data-theme="dark"] .star:nth-child(1) {
+      animation-delay: 0.5s;
+    }
+    
+    [data-theme="dark"] .star:nth-child(2) {
+      animation-delay: 0.7s;
+    }
+    
+    [data-theme="dark"] .star:nth-child(3) {
+      animation-delay: 0.9s;
+    }
+    
+    [data-theme="dark"] .star:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+    
+    [data-theme="dark"] .star:nth-child(5) {
+      animation-delay: 0.4s;
+    }
+    
+    [data-theme="dark"] .star:nth-child(6) {
+      animation-delay: 0.7s;
+    }
+    
+    [data-theme="dark"] .components .main-button:hover {
+      transform: translateX(110em);
+    }
+    
+    @keyframes naoStar {
+      0% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0.3;
+      }
+    }
+    
+    @keyframes naoCloud {
+      0% {
+        transform: scale(0.95);
+      }
+      100% {
+        transform: scale(1.05);
+      }
     }
   </style>
 </head>
 <body>
   <div id="app"></div>
   
-  <!-- 添加白天黑夜切换按钮 -->
-  <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; transform: scale(0.2);">
-    <div class="container">
-      <div class="components">
-        <div class="main-button"></div>
-        <div class="moon"></div>
-        <div class="moon"></div>
-        <div class="moon"></div>
-        <div class="daytime-backgrond"></div>
-        <div class="daytime-backgrond"></div>
-        <div class="daytime-backgrond"></div>
-        <div class="cloud">
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
+  <!-- 白天黑夜切换按钮容器 -->
+  <div class="theme-toggle-container">
+    <div class="components">
+      <div class="main-button"></div>
+      <div class="moon"></div>
+      <div class="moon"></div>
+      <div class="moon"></div>
+      <div class="daytime-backgrond"></div>
+      <div class="daytime-backgrond"></div>
+      <div class="daytime-backgrond"></div>
+      <div class="cloud">
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+      </div>
+      <div class="cloud-light">
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+        <div class="cloud-son"></div>
+      </div>
+      <div class="stars">
+        <div class="star medium">
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
         </div>
-        <div class="cloud-light">
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
-          <div class="cloud-son"></div>
+        <div class="star small">
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
         </div>
-        <div class="stars">
-          <div class="star small">
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-          </div>
-          <div class="star medium">
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-          </div>
-          <div class="star small">
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-          </div>
-          <div class="star big">
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-          </div>
-          <div class="star medium">
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-          </div>
-          <div class="star small">
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-            <div class="star-son"></div>
-          </div>
+        <div class="star small">
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+        </div>
+        <div class="star big">
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+        </div>
+        <div class="star medium">
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+        </div>
+        <div class="star medium">
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
+          <div class="star-son"></div>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- Docsify v4 -->
   <script>
     window.$docsify = {
-      loadNavbar: true, // 保持 navbar 功能，但移除 fixed 样式
-      loadSidebar: true,
-      alias: {
-        '/.*/_sidebar.md': '/_sidebar.md',
-      },
-      subMaxLevel: 2,
-      sidebarDisplayLevel: 1, // 设置侧边栏默认展开层级
+      name: 'Hus_king\'s Note',
+      repo: '',
       coverpage: true,
+      loadSidebar: true,
+      loadNavbar: true,
+      subMaxLevel: 5,
+      homepage: 'README.md',
       auto2top: true,
-      logo: '_media/avatar.ico',
-      name: 'Hus_King',
-      nameLink: '/',
-      repo: 'https://github.com/hus-king/note',
-      themeColor: '#42b983', // 设置主题色，保证切换按钮可见
-      // 关闭搜索功能
-      // search: {
-      //   maxAge: 86400000, 
-      //   paths: ['/', '/note/', '/algorithm/', '/tech/', '/uav/', '/Sach/'],
-      //   placeholder: {
-      //     '/zh-cn/': '搜索',
-      //     '/': 'Type to search',
-      //   },
-      //   noData: {
-      //     '/zh-cn/': '找不到结果',
-      //     '/': 'No Results',
-      //   },
-      //   depth: 4,
-      //   hideOtherSidebarContent: false,
-      //   namespace: 'website-1',
-      //   pathNamespaces: ['/zh-cn', '/ru-ru', '/ru-ru/v1'],
-      // },
-      
-      // 添加深色模式支持
+      relativePath: true,
       darklightTheme: {
-        siteFont: 'Source Sans Pro,Helvetica Neue,Arial,sans-serif',
-        defaultTheme: 'light',
-        dark: {
-          background: '#1c2022',
-          toggleBtnBg: '#34495e',
-          textColor: '#b4b4b4'
-        },
+        defaultTheme : 'light',
         light: {
-          background: 'white',
-          toggleBtnBg: 'var(--theme-color)',
-          textColor: 'var(--text-color-base)'
+          accent: '#42b983',
+          toogleBackground : '#f8f8f8',
+          background: '#fff',
+          textColor: '#34495e',
+          codeTextColor : '#525252',
+          codeBackgroundColor : '#f8f8f8',
+          borderColor : 'rgba(0, 0, 0, 0.07)',
+          blockQuoteColor : '#858585',
+          highlightColor : '#e96900',
+          sidebarSublink : '#b4b4b4',
+          codeTypeColor : '#091a28',
+          coverBackground : 'linear-gradient(to left bottom, hsl(118, 100%, 85%) 0%,hsl(181, 100%, 85%) 100%)',
+          toogleImage : 'url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0, 0, 0, 1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>\')'
+        },
+        dark: {
+          accent: '#42b983',
+          toogleBackground : '#091a28',
+          background: '#091a28',
+          textColor: '#b4b4b4',
+          codeTextColor : '#ffffff',
+          codeBackgroundColor : '#0e2233',
+          borderColor : '#0d2538',
+          blockQuoteColor : '#858585',
+          highlightColor : '#e96900',
+          sidebarSublink : '#b4b4b4',
+          codeTypeColor : '#ffffff',
+          coverBackground : 'linear-gradient(to left bottom, hsl(118, 100%, 85%) 0%,hsl(181, 100%, 85%) 100%)',
+          toogleImage : 'url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255, 255, 255, 1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>\')'
         }
       },
-      progress: {
-        position: 'top',
-        color: 'var(--theme-color,#42b983)',
-        height: '3px',
-      },
+      search: 'auto',
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: '搜索',
+        noData: '找不到结果',
+        namespace: 'website-1',
+        hideOtherSidebarContent: false,
+      }
     }
   </script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
-  <script src="//unpkg.com/docsify-pdf-embed-plugin/src/docsify-pdf-embed.js"></script>
-  <!-- 注释掉搜索插件 -->
-  <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script> -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/index.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-latex.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-matlab.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
-  <script src="//cdn.jsdelivr.net/npm/marked@4"></script>
-  <!-- CDN files for docsify-katex -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
-  <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-terminal-block@1.0.3"></script>
+  <script src="//cdn.jsdelivr.net/npm/marked@3"></script>
   
-  <!-- 白天黑夜切换按钮实现 -->
+  <!-- 白天黑夜切换按钮脚本 -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 设置初始主题
-      const currentTheme = localStorage.getItem('darkMode') === 'true' ? 'dark' : 'light';
-      document.body.setAttribute('data-theme', currentTheme);
+    document.addEventListener('DOMContentLoaded', function () {
+      // 获取主题切换按钮
+      const themeToggleButton = document.querySelector('.components');
       
-      // 添加按钮点击事件
-      const BUTTON = document.querySelector(".components");
-      if (BUTTON) {
-        BUTTON.addEventListener("click", function() {
-          // 切换主题状态
-          const willChangeMode = document.body.getAttribute("data-theme") === "dark" ? "light" : "dark";
-          document.body.setAttribute("data-theme", willChangeMode);
-          
-          // 触发原有的darklight主题切换按钮点击事件
-          const darklightBtn = document.querySelector('.darkmode-toggle');
-          if (darklightBtn) {
-            darklightBtn.click();
-          }
-        });
+      // 函数：同步切换主题
+      function toggleTheme() {
+        // 检查当前主题
+        const currentTheme = localStorage.getItem('DARK_LIGHT_THEME') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        // 更新 localStorage
+        localStorage.setItem('DARK_LIGHT_THEME', newTheme);
+        
+        // 更新 body 属性
+        document.body.setAttribute('data-theme', newTheme);
+        
+        // 同步更新 docsify-darklight-theme
+        const event = new Event('darklighttheme:toggle');
+        document.dispatchEvent(event);
       }
       
-      // 同步状态：当原主题切换器改变主题时，更新我们的按钮状态
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === 'class') {
-            const isDarkMode = document.body.classList.contains('darkMode');
-            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-          }
-        });
-      });
+      // 添加点击事件监听器
+      if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', toggleTheme);
+      }
       
-      observer.observe(document.body, { attributes: true });
+      // 初始化主题状态
+      function initTheme() {
+        const savedTheme = localStorage.getItem('DARK_LIGHT_THEME') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+      }
       
-      // 隐藏原始切换按钮
+      // 页面加载完成后初始化主题
+      initTheme();
+      
+      // 隐藏原始的 docsify 主题切换按钮
       setTimeout(() => {
         const originalToggleBtn = document.querySelector('.darkmode-toggle');
         if (originalToggleBtn) {
           originalToggleBtn.style.display = 'none';
         }
-      }, 1000);
+      }, 500);
     });
   </script>
 </body>
