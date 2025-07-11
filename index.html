@@ -12,11 +12,22 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css" title="docsify-darklight-theme" type="text/css" />
   <link rel="stylesheet" href="_media/cover.css?v=202507112" />
-  <!-- 保留背景样式透明度控制 -->
+  <!-- 强制应用深色背景 -->
   <style>
     /* 确保背景图案的透明度合适 */
     section.cover::before {
       opacity: 0.2 !important;
+    }
+    
+    /* 强制覆盖所有可能的背景设置 */
+    section.cover, 
+    section.cover.show,
+    body section.cover,
+    #app section.cover,
+    .app section.cover,
+    section.cover[data-page] {
+      background: linear-gradient(to left bottom, #000000 0%, #1a237e 100%) !important;
+      background-image: linear-gradient(to left bottom, #000000 0%, #1a237e 100%) !important;
     }
   </style>
   <style>
@@ -63,7 +74,7 @@
       name: 'Hus_King',
       nameLink: '/',
       repo: 'https://github.com/hus-king/note',
-      themeColor: '#42b983', // 设置主题色，保证切换按钮可见
+      themeColor: '#1a237e', // 修改为深蓝色，与背景匹配
       // 添加封面配置
       coverpage: {
         '/': '_coverpage.md'
@@ -134,6 +145,33 @@
   <!-- 封面动画和效果 -->
   <script src="_media/cover-animations.js"></script>
   <script src="_media/cover-stars.js"></script>
+  <!-- 强制应用深色背景 -->
+  <script>
+    // 在页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 立即执行一次
+      applyDarkBackground();
+      
+      // 之后每100ms执行一次，持续1秒，确保覆盖任何可能的延迟加载的样式
+      let attempts = 0;
+      const interval = setInterval(function() {
+        applyDarkBackground();
+        attempts++;
+        if (attempts >= 10) clearInterval(interval);
+      }, 100);
+      
+      function applyDarkBackground() {
+        const coverElements = document.querySelectorAll('section.cover');
+        if (coverElements.length) {
+          coverElements.forEach(function(el) {
+            el.style.setProperty('background', 'linear-gradient(to left bottom, #000000 0%, #1a237e 100%)', 'important');
+            el.style.setProperty('background-image', 'linear-gradient(to left bottom, #000000 0%, #1a237e 100%)', 'important');
+          });
+          console.log('已应用深色背景');
+        }
+      }
+    });
+  </script>
 </body>
 </html>
 
