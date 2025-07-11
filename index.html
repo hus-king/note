@@ -8,8 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="icon" type="image/svg+xml" href="_media/icon.svg">
-  <!-- 更新 Prism.js 主题 -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <style>
     /* 设置中文字体为华文中宋 */
@@ -35,37 +34,6 @@
     .sidebar {
       font-family: "华文中宋", "STZhongsong", serif !important;
     }
-    
-    /* 代码块高亮相关 */
-    pre[data-lang], pre > code {
-      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-      font-size: 1em;
-      line-height: 1.5;
-      overflow: auto;
-    }
-    
-    /* 确保 cpp 和 c 语言代码块样式 */
-    pre[data-lang="cpp"], pre[data-lang="c"] {
-      background-color: #2d2d2d; /* 深色背景 */
-      color: #ccc;
-      border-radius: 5px;
-    }
-    
-    /* 关键字高亮 */
-    .lang-cpp .token.keyword, .lang-c .token.keyword {
-      color: #cc99cd;
-    }
-    
-    /* 字符串高亮 */
-    .lang-cpp .token.string, .lang-c .token.string {
-      color: #7ec699;
-    }
-    
-    /* 注释高亮 */
-    .lang-cpp .token.comment, .lang-c .token.comment {
-      color: #999;
-      font-style: italic;
-    }
   </style>
 </head>
 <body>
@@ -87,20 +55,6 @@
       nameLink: '/',
       repo: 'https://github.com/hus-king/note',
       themeColor: '#42b983', // 设置主题色，保证切换按钮可见
-      // 显式配置语法高亮
-      markdown: {
-        smartypants: true,
-        renderer: {
-          code: function(code, lang) {
-            // 使用 PrismJS 进行高亮
-            if (Prism.languages[lang]) {
-              code = Prism.highlight(code, Prism.languages[lang], lang);
-              return '<pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + code + '</code></pre>';
-            }
-            return this.origin.code.apply(this, arguments);
-          }
-        }
-      },
       search: {
         maxAge: 86400000, // 缓存一天
         paths: ['/'],// 自动索引所有页面，实现全文搜索
@@ -126,19 +80,17 @@
       },
     }
   </script>
-  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  <!-- 更新 Prism.js 核心及组件 -->
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-cpp.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
   <script src="//unpkg.com/docsify-pdf-embed-plugin/src/docsify-pdf-embed.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
   <script src="//cdn.jsdelivr.net/npm/marked@4"></script>
@@ -148,43 +100,8 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
   <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-terminal-block@1.0.3"></script>
-  
-  <!-- 手动初始化 Prism 确保代码高亮正常工作 -->
-  <script>
-    // 检查浏览器是否支持 DOMContentLoaded
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPrism);
-    } else {
-      initPrism();
-    }
-    
-    // 在加载后也尝试初始化
-    window.addEventListener('load', initPrism);
-    
-    function initPrism() {
-      // 确认 Prism 是否加载
-      if (typeof Prism !== 'undefined') {
-        console.log('Prism is loaded and ready to highlight code');
-        Prism.highlightAll();
-        
-        // 特别处理 C++ 代码块
-        if (typeof Prism.languages.cpp === 'undefined') {
-          console.warn('C++ language definition not found');
-        } else {
-          console.log('C++ language definition loaded');
-          
-          // 手动定义 c++ 作为 cpp 的别名
-          Prism.languages['c++'] = Prism.languages.cpp;
-          
-          // 查找所有 cpp 或 c++ 代码块并手动高亮
-          document.querySelectorAll('pre code.language-cpp, pre code.language-c\\+\\+').forEach(function(block) {
-            Prism.highlightElement(block);
-          });
-        }
-      } else {
-        console.error('Prism is not loaded!');
-      }
-    }
-  </script>
 </body>
 </html>
+
+
+
