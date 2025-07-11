@@ -39,6 +39,12 @@
 </head>
 <body>
   <div id="app"></div>
+  
+  <!-- 添加自定义的白天黑夜切换按钮容器 -->
+  <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+    <toggle-button id="customThemeToggle"></toggle-button>
+  </div>
+  
   <!-- Docsify v4 -->
   <script>
     window.$docsify = {
@@ -118,6 +124,141 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
   <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-terminal-block@1.0.3"></script>
+  
+  <!-- 自定义的白天黑夜切换按钮Web Component实现 -->
+  <script>
+    class DayNightToggleButton extends HTMLElement {
+      constructor() {
+        super();
+        // 获取当前主题状态
+        this.isDark = document.body.classList.contains('darkMode');
+        this.render();
+        this.setupEventListeners();
+      }
+
+      render() {
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+          <style>
+            .toggle-button {
+              width: 60px;
+              height: 30px;
+              background-color: #f5f5f5;
+              border-radius: 15px;
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              position: relative;
+              transition: background-color 0.3s ease;
+              border: 2px solid #ddd;
+            }
+            
+            .toggle-button.dark {
+              background-color: #333;
+              border-color: #666;
+            }
+            
+            .toggle-indicator {
+              width: 26px;
+              height: 26px;
+              border-radius: 50%;
+              background-color: #fff;
+              box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+              position: absolute;
+              left: 2px;
+              transition: all 0.3s ease;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+            }
+            
+            .toggle-button.dark .toggle-indicator {
+              left: 32px;
+              background-color: #ffdb4a;
+            }
+            
+            .sun, .moon {
+              position: absolute;
+              transition: opacity 0.3s ease;
+            }
+            
+            .sun {
+              color: #ffdb4a;
+              opacity: ${this.isDark ? 0 : 1};
+            }
+            
+            .moon {
+              color: #fff;
+              opacity: ${this.isDark ? 1 : 0};
+            }
+            
+            .toggle-button.dark .sun {
+              opacity: 0;
+            }
+            
+            .toggle-button.dark .moon {
+              opacity: 1;
+            }
+          </style>
+          <div class="toggle-button ${this.isDark ? 'dark' : ''}">
+            <div class="toggle-indicator">
+              <span class="sun">☀️</span>
+              <span class="moon">🌙</span>
+            </div>
+          </div>
+        `;
+      }
+
+      setupEventListeners() {
+        const button = this.shadowRoot.querySelector('.toggle-button');
+        button.addEventListener('click', () => {
+          this.isDark = !this.isDark;
+          button.classList.toggle('dark');
+          
+          // 触发原有的darklight主题切换按钮点击事件
+          const darklightBtn = document.querySelector('.darkmode-toggle');
+          if (darklightBtn) {
+            darklightBtn.click();
+          }
+        });
+        
+        // 监听body类变化来同步按钮状态
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class') {
+              const isDarkMode = document.body.classList.contains('darkMode');
+              const buttonElem = this.shadowRoot.querySelector('.toggle-button');
+              if (isDarkMode !== this.isDark) {
+                this.isDark = isDarkMode;
+                if (isDarkMode) {
+                  buttonElem.classList.add('dark');
+                } else {
+                  buttonElem.classList.remove('dark');
+                }
+              }
+            }
+          });
+        });
+        
+        observer.observe(document.body, { attributes: true });
+      }
+    }
+
+    // 注册Web Component
+    customElements.define('toggle-button', DayNightToggleButton);
+    
+    // 将原始切换按钮隐藏
+    document.addEventListener('DOMContentLoaded', () => {
+      // 等待原按钮加载
+      setTimeout(() => {
+        const originalToggleBtn = document.querySelector('.darkmode-toggle');
+        if (originalToggleBtn) {
+          originalToggleBtn.style.display = 'none';
+        }
+      }, 1000);
+    });
+  </script>
 </body>
 </html>
 
