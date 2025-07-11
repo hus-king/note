@@ -11,18 +11,10 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css" title="docsify-darklight-theme" type="text/css" />
-  <link rel="stylesheet" href="_media/cover.css?v=202507111" />
-  <!-- 强制应用深色背景样式，避免缓存问题 -->
+  <link rel="stylesheet" href="_media/cover.css?v=202507112" />
+  <!-- 保留背景样式透明度控制 -->
   <style>
-    section.cover, 
-    body > section.cover,
-    .cover-main,
-    #app > section.cover,
-    section.cover.show {
-      background: linear-gradient(to left bottom, #000000 0%, #1a237e 100%) !important;
-      background-image: linear-gradient(to left bottom, #000000 0%, #1a237e 100%) !important;
-    }
-    /* 覆盖任何可能的before伪元素背景 */
+    /* 确保背景图案的透明度合适 */
     section.cover::before {
       opacity: 0.2 !important;
     }
@@ -142,19 +134,6 @@
   <!-- 封面动画和效果 -->
   <script src="_media/cover-animations.js"></script>
   <script src="_media/cover-stars.js"></script>
-  <!-- 强制设置深色背景 -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(function() {
-        const coverElements = document.querySelectorAll('section.cover');
-        coverElements.forEach(function(el) {
-          el.style.background = 'linear-gradient(to left bottom, #000000 0%, #1a237e 100%)';
-          el.style.backgroundImage = 'linear-gradient(to left bottom, #000000 0%, #1a237e 100%)';
-        });
-        console.log('已应用深色背景');
-      }, 100);
-    });
-  </script>
 </body>
 </html>
 
