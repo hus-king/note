@@ -1,6 +1,6 @@
 /* 封面自定义样式 */
 section.cover {
-  background: linear-gradient(to left bottom, hsl(230, 60%, 10%) 0%, hsl(200, 70%, 15%) 100%) !important;
+  background: linear-gradient(to left bottom, #000000 0%, #1a237e 100%) !important;
   color: white;
 }
 
