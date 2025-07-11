@@ -12,6 +12,12 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css" title="docsify-darklight-theme" type="text/css" />
   <link rel="stylesheet" href="_media/cover.css" />
+  <!-- 强制应用深色背景样式，避免缓存问题 -->
+  <style>
+    section.cover {
+      background: linear-gradient(to left bottom, hsl(230, 60%, 10%) 0%, hsl(200, 70%, 15%) 100%) !important;
+    }
+  </style>
   <style>
     /* 设置中文字体为华文中宋 */
     body:lang(zh), h1:lang(zh), h2:lang(zh), h3:lang(zh), h4:lang(zh), h5:lang(zh), h6:lang(zh) {
