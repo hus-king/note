@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css" title="docsify-darklight-theme" type="text/css" />
+  <link rel="stylesheet" href="_media/cover.css" />
   <style>
     /* 设置中文字体为华文中宋 */
     body:lang(zh), h1:lang(zh), h2:lang(zh), h3:lang(zh), h4:lang(zh), h5:lang(zh), h6:lang(zh) {
@@ -56,6 +57,11 @@
       nameLink: '/',
       repo: 'https://github.com/hus-king/note',
       themeColor: '#42b983', // 设置主题色，保证切换按钮可见
+      // 添加封面配置
+      coverpage: {
+        '/': '_coverpage.md'
+      },
+      onlyCover: false, // 让封面和内容页同时出现
       // 关闭搜索功能
       // search: {
       //   maxAge: 86400000, 
@@ -118,6 +124,8 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
   <script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-terminal-block@1.0.3"></script>
+  <!-- 封面动画和效果 -->
+  <script src="_media/cover-animations.js"></script>
 </body>
 </html>
 

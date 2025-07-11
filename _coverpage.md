@@ -5,7 +5,7 @@
 
 # Hus_King <small>STUDY</small>
 
-> markdown笔记在线预览
+> 代码与数学的修炼场 | 构建结构化知识库
 
 [GitHub](https://github.com/hus-king/note)
-[Get Started](README)
+[开始探索](README)
