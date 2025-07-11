@@ -267,11 +267,10 @@ section.cover .stars {
 
 section.cover .star {
   position: absolute;
-  width: 3px;
-  height: 3px;
   border-radius: 50%;
-  background-color: white;
   opacity: 0;
+  box-shadow: 0 0 10px 2px var(--star-color);
+  background: radial-gradient(circle, var(--star-color) 0%, rgba(255,255,255,0) 100%);
   animation: twinkle var(--duration) ease-in-out infinite var(--delay);
 }
 
@@ -281,7 +280,7 @@ section.cover .star {
     transform: scale(0.5);
   }
   50% {
-    opacity: 1;
+    opacity: var(--star-opacity);
     transform: scale(1);
   }
 }
