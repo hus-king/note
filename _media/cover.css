@@ -13,6 +13,22 @@ section.cover .cover-main {
   max-width: 800px;
 }
 
+/* 设置封面字体 */
+section.cover h1, 
+section.cover h2, 
+section.cover h3, 
+section.cover h4, 
+section.cover h5, 
+section.cover h6,
+section.cover p,
+section.cover a {
+  font-family: "华文中宋", "STZhongsong", serif !important;
+}
+
+section.cover *:lang(en) {
+  font-family: "Times New Roman", Times, serif !important;
+}
+
 section.cover h1 {
   font-size: 4rem;
   margin: 0.5rem 0;
@@ -39,9 +55,17 @@ section.cover p {
 section.cover blockquote {
   border-left: none;
   margin: 2rem 0;
-  padding: 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-style: italic;
+  padding: 1rem 2rem;
+  color: rgba(255, 255, 255, 1);
+  font-style: normal;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.8;
 }
 
 section.cover .cover-main > p:last-child a {
