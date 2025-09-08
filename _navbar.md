@@ -16,7 +16,10 @@
     * [Cifar100](tech/cifar.md)
     * [测速](tech/net.md)
     * [Yolo快速打标](tech/yolomake.md)
+    * [github配置](tech/github.md)
+    * [nps](tech/nps.md)
 * 无人机
     * [精英赛——任务挑战](uav/精英赛——任务挑战.md)
     * [精英赛——物流搬运](uav/精英赛——物流搬运.md)
+    * [赛项](uav/2024-2025赛季AirHust比赛日程.md)
     
