@@ -14,6 +14,7 @@
   - [大学物理](/note/大学物理)
   - [微积分](/note/微积分)
   - [近代史](/note/近代史)
+  - [数字电路](note/数字电路)
 - [🧠 算法专栏](/algorithm/)
   - [算法学习笔记](/algorithm/算法学习笔记.md)
   - [STL 宝典](/algorithm/stdc++.md)
