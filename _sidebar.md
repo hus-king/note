@@ -8,6 +8,7 @@
     * [微积分](note/微积分)
     * [近代史](note/近代史)
     * [数字电路](note/数字电路)
+    * [电路理论](note/电路理论)
 * 算法相关
     * [算法学习笔记](algorithm/算法学习笔记.md)
     * [字符串进阶](algorithm/字符串进阶.md)
@@ -21,6 +22,7 @@
     * [Yolo快速打标](tech/yolomake.md)
     * [github配置](tech/github.md)
     * [nps](tech/nps.md)
+    * [tailscale](tech/tailscale.md)
 * 无人机
     * [精英赛——任务挑战](uav/精英赛——任务挑战.md)
     * [精英赛——物流搬运](uav/精英赛——物流搬运.md)
