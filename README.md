@@ -31,6 +31,7 @@
   - [nps](tech/nps.md)
   - [tailscale自建derp节点](tech/tailscale.md)
   - [backup](tech/backup.md)
+  - [Overleaf部署](tech/overleaf.md)
 - [✈️ 无人机](/uav/)
   - [精英赛——任务挑战](uav/精英赛——任务挑战.md)
   - [精英赛——物流搬运](uav/精英赛——物流搬运.md)
