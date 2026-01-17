@@ -19,6 +19,7 @@
   - [积极分子](note/积极分子结业测试题库答案解析.md)
   - [算法分析与设计](note/算法分析与设计.md)
   - [算法题纲](note/算法题纲.md)
+  - [马克思主义基本原理](note/马原.md)
 - [🧠 算法专栏](/algorithm/)
   - [算法学习笔记](/algorithm/算法学习笔记.md)
   - [STL 宝典](/algorithm/stdc++.md)
