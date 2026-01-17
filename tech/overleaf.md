@@ -1,5 +1,6 @@
 # 部署 Overleaf 服务器（2025）
 
+原网址：[https://zhuanlan.zhihu.com/p/6093317488](https://zhuanlan.zhihu.com/p/6093317488)
 ## 目录
 
 1. 前提说明
