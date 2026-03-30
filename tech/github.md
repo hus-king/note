@@ -31,9 +31,11 @@ export ALL_PROXY=socks5://127.0.0.1:1080
 
 5、配置git
 ```bash
-# 强制 git 使用 HTTPS 直连
-git config --global --unset http.proxy
-git config --global --unset https.proxy
+# 设置 Git 全局 HTTP 代理
+git config --global http.proxy http://127.0.0.1:1080
+
+# 设置 Git 全局 HTTPS 代理
+git config --global https.proxy https://127.0.0.1:1080
 ```
 
 ## 二、配置GitHub CLI
