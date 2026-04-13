@@ -21,6 +21,7 @@
   - [算法题纲](note/算法题纲.md)
   - [马克思主义基本原理](note/马原.md)
   - [计算机组成原理](note/计算机组成原理.md)
+  - [数据库](note/数据库.md)
 - [🧠 算法专栏](/algorithm/)
   - [算法学习笔记](/algorithm/算法学习笔记.md)
   - [STL 宝典](/algorithm/stdc++.md)
