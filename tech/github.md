@@ -15,7 +15,7 @@ sudo systemctl edit snap.shadowsocks-rust.sslocal-daemon.service
 ```
 [Service]
 ExecStart=
-ExecStart=/usr/bin/snap run shadowsocks-rust.sslocal-daemon -b "127.0.0.1:1080" --server-url "ss://aes-256-cfb:hesiqi668@49.51.249.199:8388"
+ExecStart=/usr/bin/snap run shadowsocks-rust.sslocal-daemon -b "127.0.0.1:1080" --server-url "ss://aes-256-cfb:********@49.51.187.170:58399"
 ```
 
 3、启用并启动服务
