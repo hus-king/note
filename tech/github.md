@@ -52,5 +52,8 @@ gh auth login
 之后用gh替换git的默认认证方式
 ```bash
 git config --global 'credential.https://github.com.helper' ''
+```
+
+```bash
 git config --global --add 'credential.https://github.com.helper' '!gh auth git-credential'
 ```
