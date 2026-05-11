@@ -41,6 +41,7 @@
   - [Overleaf部署](tech/overleaf.md)
   - [shadowsocks](tech/shadowsocks.md)
   - [zsh](tech/zsh.md)
+  - [VNC](tech/vnc.md)
 - [✈️ 无人机](/uav/)
   - [精英赛——任务挑战](uav/精英赛——任务挑战.md)
   - [精英赛——物流搬运](uav/精英赛——物流搬运.md)
