@@ -56,6 +56,53 @@
     }
   </style>
 
+
+  <!-- ===== navbar 下拉菜单修复 ===== -->
+  <!--
+    docsify-darklight-theme 通过 CSS 变量切换主题，不使用 [data-theme] 属性
+    vue.css 中 .app-nav li ul 硬编码了 background: #fff，不受主题控制
+    这里的规则用更高优先级（body 前缀 + !important）覆盖，并使用主题 CSS 变量
+  -->
+  <style>
+    /* ---------- 下拉菜单背景 & 文字（使用 darklight-theme 的 CSS 变量） ---------- */
+    body .app-nav li ul {
+      /* 用 var(--background) 跟随主题切换；fallback 为深蓝 */
+      background-color: var(--background, #121836) !important;
+      color: var(--textColor, #e0e0e0) !important;
+      border-color: var(--borderColor, #1a237e) !important;
+    }
+
+    /* 下拉菜单链接 */
+    body .app-nav li ul a {
+      color: var(--textColor, #c8cdd8) !important;
+    }
+    body .app-nav li ul a:hover,
+    body .app-nav li ul a.active {
+      background: var(--highlightColor, rgba(255,255,255,0.08)) !important;
+      color: #ffffff !important;
+    }
+
+    /* 一级菜单项 */
+    body .app-nav > ul > li > a {
+      color: var(--textColor, #c8cdd8) !important;
+    }
+    body .app-nav > ul > li > a:hover,
+    body .app-nav > ul > li > a.active {
+      color: var(--accent, #ffffff) !important;
+    }
+
+    /* ---------- 下拉菜单滚动条美化 ---------- */
+    body .app-nav li ul {
+      scrollbar-width: thin !important;
+      scrollbar-color: rgba(128,128,128,0.3) transparent !important;
+    }
+    body .app-nav li ul::-webkit-scrollbar { width: 5px !important; }
+    body .app-nav li ul::-webkit-scrollbar-track { background: transparent !important; }
+    body .app-nav li ul::-webkit-scrollbar-thumb {
+      background: rgba(128,128,128,0.35) !important;
+      border-radius: 3px !important;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>
@@ -121,99 +168,6 @@
       },
     }
   </script>
-  <!-- ===== navbar 下拉菜单修复：溢出控制 + 深色模式适配 ===== -->
-  <script>
-    (function() {
-      var DARK_BG       = '#1e2245';
-      var DARK_BORDER   = '#1a237e';
-      var LINK_COLOR    = '#c8cdd8';
-      var LINK_HOVER_BG = '#28305a';
-      var LINK_HOVER_C  = '#ffffff';
-
-      function isDark() {
-        var h = document.documentElement;
-        var b = document.body;
-        return (h.getAttribute('data-theme') === 'dark' ||
-                b.getAttribute('data-theme') === 'dark' ||
-                (b.classList && b.classList.contains('dark')));
-      }
-
-      function styleSubmenu(ul) {
-        if (!ul || ul._navbarFixed) return;
-        ul._navbarFixed = true;
-        // 溢出控制
-        ul.style.maxHeight = '65vh';
-        ul.style.overflowY = 'auto';
-        ul.style.scrollbarWidth = 'thin';
-        ul.style.scrollbarColor = 'rgba(255,255,255,0.2) transparent';
-        applyThemeToSubmenu(ul);
-      }
-
-      function applyThemeToSubmenu(ul) {
-        var dark = isDark();
-        ul.style.background  = dark ? DARK_BG     : '';
-        ul.style.borderColor = dark ? DARK_BORDER : '';
-        var links = ul.querySelectorAll('a');
-        for (var i = 0; i < links.length; i++) {
-          links[i].style.color = dark ? LINK_COLOR : '';
-        }
-        var lis = ul.querySelectorAll('li');
-        for (var j = 0; j < lis.length; j++) {
-          lis[j].style.borderBottom = dark ? '1px solid rgba(255,255,255,0.06)' : '';
-        }
-      }
-
-      function styleTopNav() {
-        var nav = document.querySelector('.app-nav');
-        if (!nav) return;
-        var topLinks = nav.querySelectorAll(':scope > ul > li > a');
-        for (var i = 0; i < topLinks.length; i++) {
-          topLinks[i].style.color = isDark() ? LINK_COLOR : '';
-        }
-        var subs = nav.querySelectorAll('ul ul');
-        for (var k = 0; k < subs.length; k++) {
-          styleSubmenu(subs[k]);
-        }
-      }
-
-      function fixAll() {
-        styleTopNav();
-        var sidebarSubs = document.querySelectorAll('.sidebar-nav ul ul');
-        for (var i = 0; i < sidebarSubs.length; i++) {
-          styleSubmenu(sidebarSubs[i]);
-        }
-      }
-
-      // 监听 theme 属性变更（docsify-darklight-theme 切换时触发）
-      var themeObserver = new MutationObserver(function(mutations) {
-        for (var m = 0; m < mutations.length; m++) {
-          if (mutations[m].attributeName === 'data-theme') {
-            fixAll();
-          }
-        }
-      });
-      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-      themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme', 'class'] });
-
-      // 通过 Docsify 插件 hook，每次路由切换后重新应用（此时 $docsify 已定义）
-      window.$docsify.plugins = window.$docsify.plugins || [];
-      window.$docsify.plugins.push(function(hook) {
-        hook.doneEach(function() {
-          // 多次延迟以确保 navbar 已插入 DOM
-          setTimeout(fixAll, 80);
-          setTimeout(fixAll, 300);
-          setTimeout(fixAll, 700);
-        });
-      });
-
-      // 兜底：页面首次加载后多次重试
-      document.addEventListener('DOMContentLoaded', function() {
-        [200, 500, 1000, 2000].forEach(function(d) {
-          setTimeout(fixAll, d);
-        });
-      });
-    })();
-  </script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
@@ -267,6 +221,26 @@
       }
     });
   </script>
+  <!-- navbar 兜底：当主题切换时重新同步 inline style -->
+  <script>
+    (function() {
+      function fix() {
+        var subs = document.querySelectorAll('.app-nav li ul');
+        for (var i = 0; i < subs.length; i++) {
+          var bg = getComputedStyle(document.body).getPropertyValue('--background').trim();
+          var tc = getComputedStyle(document.body).getPropertyValue('--textColor').trim();
+          if (bg) subs[i].style.setProperty('background-color', bg, 'important');
+          if (tc) subs[i].style.setProperty('color', tc, 'important');
+        }
+      }
+      // 初始执行 + 主题切换按钮点击后执行
+      setTimeout(fix, 600);
+      setTimeout(fix, 1500);
+      var toggle = document.querySelector('#docsify-darklight-theme');
+      if (toggle) toggle.addEventListener('click', function() { setTimeout(fix, 100); });
+    })();
+  </script>
+
 </body>
 </html>
 
