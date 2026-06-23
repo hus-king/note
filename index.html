@@ -56,27 +56,99 @@
     }
   </style>
   <style>
-    /* 深色模式下 navbar 下拉菜单背景适配 */
-    body[data-theme="dark"] .dropdown-menu,
-    body[data-theme="dark"] .sidebar-nav .dropdown-menu {
-      background: #232a4d !important;
-      color: #e0e0e0 !important;
-      border-color: #1a237e !important;
+    /* ===== 下拉菜单溢出控制 ===== */
+    /* 限制所有导航下拉菜单的最大高度，超出部分可滚动 */
+    .app-nav ul ul,
+    .app-nav ul li ul,
+    .app-nav .dropdown-menu,
+    nav.app-nav li ul {
+      max-height: 65vh;
+      overflow-y: auto;
+      /* 美化滚动条 */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
     }
-    /* 深色模式下 navbar 下拉菜单背景及文字适配 */
+
+    /* WebKit 浏览器滚动条样式 */
+    .app-nav ul ul::-webkit-scrollbar,
+    .app-nav .dropdown-menu::-webkit-scrollbar {
+      width: 5px;
+    }
+    .app-nav ul ul::-webkit-scrollbar-track,
+    .app-nav .dropdown-menu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .app-nav ul ul::-webkit-scrollbar-thumb,
+    .app-nav .dropdown-menu::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    /* ===== 深色模式下拉菜单适配 ===== */
+    /* 覆盖多种可能的深色模式标记方式 */
+    [data-theme="dark"] .app-nav,
+    [data-theme="dark"] .app-nav ul,
+    [data-theme="dark"] .app-nav li ul,
+    [data-theme="dark"] .app-nav .dropdown-menu,
+    [data-theme="dark"] .sidebar-nav .dropdown-menu,
+    html[data-theme="dark"] .app-nav,
+    html[data-theme="dark"] .app-nav ul ul,
+    html[data-theme="dark"] .app-nav .dropdown-menu,
     body[data-theme="dark"] .app-nav,
-    body[data-theme="dark"] .app-nav .dropdown,
+    body[data-theme="dark"] .app-nav ul ul,
     body[data-theme="dark"] .app-nav .dropdown-menu {
-      background: #232a4d !important;
+      background: #1e2245 !important;
       color: #e0e0e0 !important;
       border-color: #1a237e !important;
     }
+
+    /* 下拉菜单链接颜色 */
+    [data-theme="dark"] .app-nav ul ul a,
+    [data-theme="dark"] .app-nav .dropdown-menu a,
+    html[data-theme="dark"] .app-nav ul ul a,
+    body[data-theme="dark"] .app-nav ul ul a,
     body[data-theme="dark"] .app-nav .dropdown-menu a {
-      color: #e0e0e0 !important;
+      color: #c8cdd8 !important;
     }
-    body[data-theme="dark"] .app-nav .dropdown-menu a:hover {
-      background: #1a237e !important;
-      color: #fff !important;
+
+    /* 下拉菜单链接悬停 */
+    [data-theme="dark"] .app-nav ul ul a:hover,
+    [data-theme="dark"] .app-nav ul ul a.active,
+    [data-theme="dark"] .app-nav .dropdown-menu a:hover,
+    [data-theme="dark"] .app-nav .dropdown-menu a.active,
+    html[data-theme="dark"] .app-nav ul ul a:hover,
+    body[data-theme="dark"] .app-nav ul ul a:hover,
+    body[data-theme="dark"] .app-nav .dropdown-menu a:hover,
+    body[data-theme="dark"] .app-nav .dropdown-menu a.active {
+      background: #28305a !important;
+      color: #ffffff !important;
+    }
+
+    /* 深色模式下下拉菜单滚动条 */
+    [data-theme="dark"] .app-nav ul ul::-webkit-scrollbar-thumb,
+    html[data-theme="dark"] .app-nav ul ul::-webkit-scrollbar-thumb,
+    body[data-theme="dark"] .app-nav ul ul::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* 下拉菜单分隔线 */
+    [data-theme="dark"] .app-nav ul ul li,
+    html[data-theme="dark"] .app-nav ul ul li,
+    body[data-theme="dark"] .app-nav ul ul li {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* 深色模式下 navbar 一级菜单项 */
+    [data-theme="dark"] .app-nav > ul > li > a,
+    html[data-theme="dark"] .app-nav > ul > li > a,
+    body[data-theme="dark"] .app-nav > ul > li > a {
+      color: #c8cdd8 !important;
+    }
+    [data-theme="dark"] .app-nav > ul > li > a:hover,
+    [data-theme="dark"] .app-nav > ul > li > a.active,
+    html[data-theme="dark"] .app-nav > ul > li > a:hover,
+    body[data-theme="dark"] .app-nav > ul > li > a:hover {
+      color: #ffffff !important;
     }
   </style>
 </head>
