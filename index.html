@@ -55,102 +55,7 @@
       font-family: "华文中宋", "STZhongsong", serif !important;
     }
   </style>
-  <style>
-    /* ===== 下拉菜单溢出控制 ===== */
-    /* 限制所有导航下拉菜单的最大高度，超出部分可滚动 */
-    .app-nav ul ul,
-    .app-nav ul li ul,
-    .app-nav .dropdown-menu,
-    nav.app-nav li ul {
-      max-height: 65vh;
-      overflow-y: auto;
-      /* 美化滚动条 */
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-    }
 
-    /* WebKit 浏览器滚动条样式 */
-    .app-nav ul ul::-webkit-scrollbar,
-    .app-nav .dropdown-menu::-webkit-scrollbar {
-      width: 5px;
-    }
-    .app-nav ul ul::-webkit-scrollbar-track,
-    .app-nav .dropdown-menu::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .app-nav ul ul::-webkit-scrollbar-thumb,
-    .app-nav .dropdown-menu::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 3px;
-    }
-
-    /* ===== 深色模式下拉菜单适配 ===== */
-    /* 覆盖多种可能的深色模式标记方式 */
-    [data-theme="dark"] .app-nav,
-    [data-theme="dark"] .app-nav ul,
-    [data-theme="dark"] .app-nav li ul,
-    [data-theme="dark"] .app-nav .dropdown-menu,
-    [data-theme="dark"] .sidebar-nav .dropdown-menu,
-    html[data-theme="dark"] .app-nav,
-    html[data-theme="dark"] .app-nav ul ul,
-    html[data-theme="dark"] .app-nav .dropdown-menu,
-    body[data-theme="dark"] .app-nav,
-    body[data-theme="dark"] .app-nav ul ul,
-    body[data-theme="dark"] .app-nav .dropdown-menu {
-      background: #1e2245 !important;
-      color: #e0e0e0 !important;
-      border-color: #1a237e !important;
-    }
-
-    /* 下拉菜单链接颜色 */
-    [data-theme="dark"] .app-nav ul ul a,
-    [data-theme="dark"] .app-nav .dropdown-menu a,
-    html[data-theme="dark"] .app-nav ul ul a,
-    body[data-theme="dark"] .app-nav ul ul a,
-    body[data-theme="dark"] .app-nav .dropdown-menu a {
-      color: #c8cdd8 !important;
-    }
-
-    /* 下拉菜单链接悬停 */
-    [data-theme="dark"] .app-nav ul ul a:hover,
-    [data-theme="dark"] .app-nav ul ul a.active,
-    [data-theme="dark"] .app-nav .dropdown-menu a:hover,
-    [data-theme="dark"] .app-nav .dropdown-menu a.active,
-    html[data-theme="dark"] .app-nav ul ul a:hover,
-    body[data-theme="dark"] .app-nav ul ul a:hover,
-    body[data-theme="dark"] .app-nav .dropdown-menu a:hover,
-    body[data-theme="dark"] .app-nav .dropdown-menu a.active {
-      background: #28305a !important;
-      color: #ffffff !important;
-    }
-
-    /* 深色模式下下拉菜单滚动条 */
-    [data-theme="dark"] .app-nav ul ul::-webkit-scrollbar-thumb,
-    html[data-theme="dark"] .app-nav ul ul::-webkit-scrollbar-thumb,
-    body[data-theme="dark"] .app-nav ul ul::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-    }
-
-    /* 下拉菜单分隔线 */
-    [data-theme="dark"] .app-nav ul ul li,
-    html[data-theme="dark"] .app-nav ul ul li,
-    body[data-theme="dark"] .app-nav ul ul li {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    /* 深色模式下 navbar 一级菜单项 */
-    [data-theme="dark"] .app-nav > ul > li > a,
-    html[data-theme="dark"] .app-nav > ul > li > a,
-    body[data-theme="dark"] .app-nav > ul > li > a {
-      color: #c8cdd8 !important;
-    }
-    [data-theme="dark"] .app-nav > ul > li > a:hover,
-    [data-theme="dark"] .app-nav > ul > li > a.active,
-    html[data-theme="dark"] .app-nav > ul > li > a:hover,
-    body[data-theme="dark"] .app-nav > ul > li > a:hover {
-      color: #ffffff !important;
-    }
-  </style>
 </head>
 <body>
   <div id="app"></div>
@@ -215,6 +120,99 @@
         height: '3px',
       },
     }
+  </script>
+  <!-- ===== navbar 下拉菜单修复：溢出控制 + 深色模式适配 ===== -->
+  <script>
+    (function() {
+      var DARK_BG       = '#1e2245';
+      var DARK_BORDER   = '#1a237e';
+      var LINK_COLOR    = '#c8cdd8';
+      var LINK_HOVER_BG = '#28305a';
+      var LINK_HOVER_C  = '#ffffff';
+
+      function isDark() {
+        var h = document.documentElement;
+        var b = document.body;
+        return (h.getAttribute('data-theme') === 'dark' ||
+                b.getAttribute('data-theme') === 'dark' ||
+                (b.classList && b.classList.contains('dark')));
+      }
+
+      function styleSubmenu(ul) {
+        if (!ul || ul._navbarFixed) return;
+        ul._navbarFixed = true;
+        // 溢出控制
+        ul.style.maxHeight = '65vh';
+        ul.style.overflowY = 'auto';
+        ul.style.scrollbarWidth = 'thin';
+        ul.style.scrollbarColor = 'rgba(255,255,255,0.2) transparent';
+        applyThemeToSubmenu(ul);
+      }
+
+      function applyThemeToSubmenu(ul) {
+        var dark = isDark();
+        ul.style.background  = dark ? DARK_BG     : '';
+        ul.style.borderColor = dark ? DARK_BORDER : '';
+        var links = ul.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          links[i].style.color = dark ? LINK_COLOR : '';
+        }
+        var lis = ul.querySelectorAll('li');
+        for (var j = 0; j < lis.length; j++) {
+          lis[j].style.borderBottom = dark ? '1px solid rgba(255,255,255,0.06)' : '';
+        }
+      }
+
+      function styleTopNav() {
+        var nav = document.querySelector('.app-nav');
+        if (!nav) return;
+        var topLinks = nav.querySelectorAll(':scope > ul > li > a');
+        for (var i = 0; i < topLinks.length; i++) {
+          topLinks[i].style.color = isDark() ? LINK_COLOR : '';
+        }
+        var subs = nav.querySelectorAll('ul ul');
+        for (var k = 0; k < subs.length; k++) {
+          styleSubmenu(subs[k]);
+        }
+      }
+
+      function fixAll() {
+        styleTopNav();
+        var sidebarSubs = document.querySelectorAll('.sidebar-nav ul ul');
+        for (var i = 0; i < sidebarSubs.length; i++) {
+          styleSubmenu(sidebarSubs[i]);
+        }
+      }
+
+      // 监听 theme 属性变更（docsify-darklight-theme 切换时触发）
+      var themeObserver = new MutationObserver(function(mutations) {
+        for (var m = 0; m < mutations.length; m++) {
+          if (mutations[m].attributeName === 'data-theme') {
+            fixAll();
+          }
+        }
+      });
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+
+      // 通过 Docsify 插件 hook，每次路由切换后重新应用（此时 $docsify 已定义）
+      window.$docsify.plugins = window.$docsify.plugins || [];
+      window.$docsify.plugins.push(function(hook) {
+        hook.doneEach(function() {
+          // 多次延迟以确保 navbar 已插入 DOM
+          setTimeout(fixAll, 80);
+          setTimeout(fixAll, 300);
+          setTimeout(fixAll, 700);
+        });
+      });
+
+      // 兜底：页面首次加载后多次重试
+      document.addEventListener('DOMContentLoaded', function() {
+        [200, 500, 1000, 2000].forEach(function(d) {
+          setTimeout(fixAll, d);
+        });
+      });
+    })();
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
