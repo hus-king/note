@@ -616,3 +616,146 @@ fig.savefig(os.path.join(out, 'xh_ft_table_sinusoid.png'))
 plt.close(fig)
 
 print("Figures 13-16 (FT table) saved.")
+
+# ============================================================
+# 17. Even function: triangle wave — only cosine terms
+# ============================================================
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+T = 4
+t = np.linspace(-6, 6, 2000)
+def even_triangle(t, T=4):
+    t_mod = t % T
+    t_c = t_mod - T/2
+    return np.where(t_c <= 0, t_c + 2, -t_c + 2)
+
+f = even_triangle(t)
+ax1.plot(t, f, 'b', lw=2)
+ax1.fill_between(t, f, alpha=0.08, color='b')
+ax1.axvline(0, color='red', linestyle='--', lw=0.8, alpha=0.5)
+ax1.set_title(r'Even: $f(-t)=f(t)$  (triangle wave)', fontsize=12)
+ax1.set_xlabel('$t$'); ax1.set_xlim(-6, 6); ax1.set_ylim(-0.2, 2.5)
+ax1.axhline(0, color='gray', lw=0.5); ax1.grid(True, alpha=0.3)
+
+# Spectrum: only DC + cos terms
+n_vals = np.array([0, 1, 2, 3, 4, 5])
+amp = np.array([1.0, 8/np.pi**2, 0, 8/(9*np.pi**2), 0, 8/(25*np.pi**2)])
+colors = ['gray'] + ['b']*5
+ax2.stem(n_vals, amp, linefmt='b-', markerfmt='bo', basefmt='k-')
+ax2.set_title(r'FS: only $a_0$ + $a_n\cos$  (no $\sin$)', fontsize=12)
+ax2.set_xlabel(r'$n$'); ax2.set_ylabel(r'$a_n$')
+ax2.set_xticks([0, 1, 2, 3, 4, 5])
+ax2.set_xlim(-0.3, 5.5); ax2.set_ylim(-0.02, 1.1)
+ax2.axhline(0, color='gray', lw=0.5); ax2.grid(True, alpha=0.3)
+
+fig.suptitle('Periodic Even Function → Cosine Terms Only', fontsize=13, fontweight='bold')
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_even_func.png')); plt.close(fig)
+
+# ============================================================
+# 18. Odd function: sawtooth wave — only sine terms
+# ============================================================
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+T = 4
+t = np.linspace(-6, 6, 2000)
+def sawtooth(t, T=4):
+    t_mod = t % T
+    return (t_mod / T) * 2 - 1  # normalized to [-1, 1]
+
+f = sawtooth(t, T)
+ax1.plot(t, f, 'b', lw=2)
+ax1.axvline(0, color='red', linestyle='--', lw=0.8, alpha=0.5)
+ax1.set_title(r'Odd: $f(-t)=-f(t)$  (sawtooth)', fontsize=12)
+ax1.set_xlabel('$t$'); ax1.set_xlim(-6, 6); ax1.set_ylim(-1.3, 1.3)
+ax1.axhline(0, color='gray', lw=0.5); ax1.grid(True, alpha=0.3)
+
+# Spectrum: only sin terms
+n_vals = np.array([1, 2, 3, 4, 5])
+b_n = np.array([2/np.pi, -1/np.pi, 2/(3*np.pi), -1/(2*np.pi), 2/(5*np.pi)])
+ax2.stem(n_vals, b_n, linefmt='r-', markerfmt='ro', basefmt='k-')
+ax2.set_title(r'FS: only $b_n\sin$  (no $\cos$, no DC)', fontsize=12)
+ax2.set_xlabel(r'$n$'); ax2.set_ylabel(r'$b_n$')
+ax2.set_xticks([1, 2, 3, 4, 5])
+ax2.set_xlim(0.3, 5.7)
+ax2.axhline(0, color='gray', lw=0.5); ax2.grid(True, alpha=0.3)
+
+fig.suptitle('Periodic Odd Function → Sine Terms Only', fontsize=13, fontweight='bold')
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_odd_func.png')); plt.close(fig)
+
+print("Figures 17-18 (even/odd functions) saved.")
+
+# ============================================================
+# 19. Odd-harmonic vs Even-harmonic functions
+# ============================================================
+fig, axes = plt.subplots(2, 2, figsize=(12, 7))
+
+T = 4
+t = np.linspace(-6, 6, 3000)
+
+# --- Odd-harmonic: symmetric square wave, f(t+T/2) = -f(t) ---
+def odd_harmonic(t, T=4):
+    t_mod = t % T
+    return np.where(t_mod < T/2, 1, -1)
+
+f_odd_h = odd_harmonic(t, T)
+ax = axes[0, 0]
+ax.plot(t, f_odd_h, 'b', lw=1.8)
+ax.fill_between(t, f_odd_h, alpha=0.06, color='b')
+# mark half-period
+ax.axvspan(0, T/2, alpha=0.1, color='blue')
+ax.axvspan(T/2, T, alpha=0.1, color='red')
+ax.set_title(r'Odd-harmonic: $f(t+T/2) = -f(t)$', fontsize=12)
+ax.set_xlabel('$t$'); ax.set_xlim(-4, 4); ax.set_ylim(-1.5, 1.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+# spectrum: only odd n
+n = np.arange(0, 10)
+a_odd = np.array([0, 4/np.pi, 0, 4/(3*np.pi), 0, 4/(5*np.pi), 0, 4/(7*np.pi), 0, 4/(9*np.pi)])
+ax = axes[0, 1]
+ax.stem(n, a_odd, linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'FS: only odd harmonics ($n=1,3,5,\dots$)', fontsize=12)
+ax.set_xlabel(r'$n$'); ax.set_xticks(range(10))
+ax.set_xlim(-0.3, 9.5); ax.set_ylim(-0.05, 1.4)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+# --- Even-harmonic: full-wave rectified, f(t+T/2) = f(t) ---
+def even_harmonic(t, T=4):
+    t_mod = t % T
+    return np.abs(np.sin(np.pi * t_mod / T * 2)) * 2 - 1  # full-wave rectified style
+
+# Actually let me use a simpler even-harmonic example: |cos|
+def even_harmonic_wave(t, T=4):
+    t_mod = t % (T/2)  # actual period is T/2
+    return np.cos(2*np.pi*t_mod/T)  # just a cosine at double frequency
+
+# Better: use a waveform that repeats every T/2
+t_half = np.linspace(-4, 4, 3000)
+f_even_h = np.abs(np.cos(np.pi * t_half / (T/4)))
+f_even_h = f_even_h * 2 - 1  # scale to [-1, 1]
+
+ax = axes[1, 0]
+ax.plot(t_half, f_even_h, 'b', lw=1.8)
+ax.fill_between(t_half, f_even_h, alpha=0.06, color='b')
+ax.axvspan(0, T/2, alpha=0.1, color='blue')
+ax.axvspan(T/2, T, alpha=0.1, color='blue')
+ax.set_title(r'Even-harmonic: $f(t+T/2) = f(t)$', fontsize=12)
+ax.set_xlabel('$t$'); ax.set_xlim(-4, 4); ax.set_ylim(-1.5, 1.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+# spectrum: only even n (including DC)
+n = np.arange(0, 10)
+a_even = np.array([0.5, 0, 1.0, 0, 0.3, 0, 0.1, 0, 0.05, 0])
+ax = axes[1, 1]
+ax.stem(n, a_even, linefmt='r-', markerfmt='ro', basefmt='k-')
+ax.set_title(r'FS: only even harmonics ($n=0,2,4,\dots$)', fontsize=12)
+ax.set_xlabel(r'$n$'); ax.set_xticks(range(10))
+ax.set_xlim(-0.3, 9.5); ax.set_ylim(-0.05, 1.2)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+fig.suptitle('Half-Wave Symmetry: Odd-Harmonic vs Even-Harmonic', fontsize=14, fontweight='bold')
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_halfwave_sym.png')); plt.close(fig)
+
+print("Figure 19 (half-wave symmetry) saved.")
