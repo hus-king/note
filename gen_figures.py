@@ -80,22 +80,22 @@ plt.close(fig)
 # ============================================================
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 3.5))
 
-t = np.linspace(-1, 5, 900)
+t1 = np.linspace(-1, 5, 900)
 tau = 2
-G = np.heaviside(t, 1) - np.heaviside(t - tau, 1)
+G = np.heaviside(t1, 1) - np.heaviside(t1 - tau, 1)
 
 t0 = 1
-t = np.linspace(-1, 6, 900)
-G1 = np.heaviside(t - t0, 1) - np.heaviside(t - t0 - tau, 1)
+t2 = np.linspace(-1, 6, 900)
+G1 = np.heaviside(t2 - t0, 1) - np.heaviside(t2 - t0 - tau, 1)
 
-ax1.plot(t, G, 'b', linewidth=1.8)
+ax1.plot(t1, G, 'b', linewidth=1.8)
 ax1.set_title(r'$G(t) = u(t) - u(t-\tau),\ \tau=2$')
 ax1.set_xlabel('$t$'); ax1.set_ylabel('')
 ax1.set_xlim(-1, 5); ax1.set_ylim(-0.2, 1.3)
 ax1.axhline(0, color='gray', linewidth=0.5)
 ax1.grid(True, alpha=0.3)
 
-ax2.plot(t, G1, 'b', linewidth=1.8)
+ax2.plot(t2, G1, 'b', linewidth=1.8)
 ax2.set_title(r'$G_1(t) = u(t-t_0) - u(t-t_0-\tau)$')
 ax2.set_xlabel('$t$'); ax2.set_ylabel('')
 ax2.set_xlim(-1, 6); ax2.set_ylim(-0.2, 1.3)
