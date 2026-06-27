@@ -481,4 +481,183 @@ plt.close(fig)
 
 print("Chapter 6 figures saved.")
 
+# ============================================================
+# Chapter 7 figures
+# ============================================================
+
+# --- Ch7-1: Basic discrete sequences ---
+fig, axes = plt.subplots(2, 3, figsize=(14, 8))
+
+# (a) δ(n)
+n = np.arange(-3, 7)
+ax = axes[0, 0]
+ax.stem(n, (n == 0).astype(float), linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'$\delta(n)$', fontsize=12)
+ax.set_xlabel('$n$'); ax.set_xlim(-3, 6); ax.set_ylim(-0.1, 1.3)
+ax.grid(True, alpha=0.3)
+
+# (b) u(n)
+ax = axes[0, 1]
+ax.stem(n, (n >= 0).astype(float), linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'$u(n)$', fontsize=12)
+ax.set_xlabel('$n$'); ax.set_xlim(-3, 6); ax.set_ylim(-0.1, 1.3)
+ax.grid(True, alpha=0.3)
+
+# (c) G_N(n), N=4
+ax = axes[0, 2]
+GN = ((n >= 0) & (n < 4)).astype(float)
+ax.stem(n, GN, linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'$G_N(n),\ N=4$', fontsize=12)
+ax.set_xlabel('$n$'); ax.set_xlim(-3, 6); ax.set_ylim(-0.1, 1.3)
+ax.grid(True, alpha=0.3)
+
+# (d) a^n u(n), a=0.7 (decay)
+n_long = np.arange(0, 12)
+ax = axes[1, 0]
+ax.stem(n_long, 0.7**n_long, linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'$a^n u(n),\ a=0.7$', fontsize=12)
+ax.set_xlabel('$n$'); ax.set_xlim(-0.5, 11.5); ax.set_ylim(-0.05, 1.1)
+ax.grid(True, alpha=0.3)
+
+# (e) a^n u(n), a=1.3 (growth)
+ax = axes[1, 1]
+ax.stem(n_long[:8], 1.3**n_long[:8], linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'$a^n u(n),\ a=1.3$', fontsize=12)
+ax.set_xlabel('$n$'); ax.set_xlim(-0.5, 7.5); ax.set_ylim(-0.5, 8)
+ax.grid(True, alpha=0.3)
+
+# (f) sin(nω₀), ω₀ = π/4
+n_sin = np.arange(0, 20)
+ax = axes[1, 2]
+ax.stem(n_sin, np.sin(np.pi/4 * n_sin), linefmt='b-', markerfmt='bo', basefmt='k-')
+ax.set_title(r'$\sin(n\omega_0),\ \omega_0=\pi/4$', fontsize=12)
+ax.set_xlabel('$n$'); ax.set_xlim(-0.5, 19.5); ax.set_ylim(-1.3, 1.3)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+fig.suptitle('Basic Discrete Sequences (Ch7.1)', fontsize=14, fontweight='bold')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch7_sequences.png'))
+plt.close(fig)
+
+# --- Ch7-2: Sampling theorem — spectra ---
+fig, axes = plt.subplots(1, 3, figsize=(14, 4.5))
+
+w = np.linspace(-8, 8, 2000)
+wm = 2  # max frequency of original signal
+ws = 6  # sampling frequency
+
+# (a) Original spectrum F(ω) — triangular
+F = np.maximum(1 - np.abs(w)/wm, 0)
+ax = axes[0]
+ax.plot(w, F, 'b', lw=2); ax.fill_between(w, F, alpha=0.1, color='b')
+ax.set_title(r'Original $F(\omega)$', fontsize=12)
+ax.set_xlabel(r'$\omega$'); ax.set_xlim(-8, 8); ax.set_ylim(-0.1, 1.3)
+ax.axvline(wm, color='r', linestyle='--', lw=0.6, alpha=0.5, label=r'$\omega_m$')
+ax.axvline(-wm, color='r', linestyle='--', lw=0.6, alpha=0.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3); ax.legend(fontsize=8)
+
+# (b) Sampled spectrum: Fs(ω) periodic with ωs
+Fs = np.zeros_like(w)
+for k in range(-3, 4):
+    Fs += np.maximum(1 - np.abs(w - k*ws)/wm, 0) / ws
+ax = axes[1]
+ax.plot(w, Fs, 'r', lw=1.5)
+ax.set_title(r'Sampled $F_s(\omega)$  ($\omega_s=6 > 2\omega_m$)', fontsize=12)
+ax.set_xlabel(r'$\omega$'); ax.set_xlim(-8, 8); ax.set_ylim(-0.1, 0.5)
+for k in range(-1, 2):
+    ax.axvline(k*ws, color='gray', linestyle=':', lw=0.5, alpha=0.5)
+ax.text(ws, 0.4, r'$\omega_s$', fontsize=10, color='gray')
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+# (c) Aliasing: Fs(ω) when ωs < 2ωm (undersampling)
+ws_low = 2.5
+Fs_alias = np.zeros_like(w)
+for k in range(-4, 5):
+    Fs_alias += np.maximum(1 - np.abs(w - k*ws_low)/wm, 0) / ws_low
+ax = axes[2]
+ax.plot(w, Fs_alias, 'purple', lw=1.5)
+ax.set_title(r'Aliasing  ($\omega_s=2.5 < 2\omega_m$)', fontsize=12)
+ax.set_xlabel(r'$\omega$'); ax.set_xlim(-8, 8); ax.set_ylim(-0.1, 0.8)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(4, 0.6, 'Overlap!', fontsize=11, color='red')
+
+fig.suptitle('Sampling Theorem — Spectrum Analysis (Ch7.2)', fontsize=14, fontweight='bold')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch7_sampling.png'))
+plt.close(fig)
+
+# --- Ch7-3: Discrete system block diagram ---
+fig, axes = plt.subplots(1, 3, figsize=(11, 3))
+
+for ax, (title, sym) in zip(axes, [
+    ('Adder', r'$x_1(n)+x_2(n)$'),
+    ('Multiplier', r'$a \cdot x(n)$'),
+    ('Unit Delay', r'$x(n-1)$'),
+]):
+    ax.text(0.5, 0.55, sym, ha='center', va='center', fontsize=13,
+            bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.3))
+    ax.set_title(title, fontsize=11)
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+    ax.set_xticks([]); ax.set_yticks([])
+
+fig.suptitle('Discrete System Basic Elements  (Ch7.3)', fontsize=13, fontweight='bold')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch7_blocks.png'))
+plt.close(fig)
+
+# --- Ch7-4: Convolution sum graphical method ---
+fig, axes = plt.subplots(1, 4, figsize=(16, 4))
+
+m = np.arange(-3, 8)
+# x(m) = u(m) - u(m-4)
+x = ((m >= 0) & (m < 4)).astype(float)
+# h(m) = 0.8^m u(m)
+h = 0.8**m * (m >= 0).astype(float)
+
+# Step 1: original x(m) and h(m)
+ax = axes[0]
+ax.stem(m, x, linefmt='b-', markerfmt='bo', basefmt='k-', label=r'$x(m)$')
+ax.stem(m, h, linefmt='r-', markerfmt='ro', basefmt='k-', label=r'$h(m)$')
+ax.set_title('1. Original', fontsize=11)
+ax.set_xlabel('$m$'); ax.set_xlim(-3, 7); ax.set_ylim(-0.1, 1.3)
+ax.legend(fontsize=7); ax.grid(True, alpha=0.3)
+
+# Step 2: fold h(-m)
+ax = axes[1]
+h_fold = 0.8**(-m) * (-m >= 0).astype(float)
+ax.stem(m, x, linefmt='b-', markerfmt='bo', basefmt='k-', label=r'$x(m)$')
+ax.stem(m, h_fold, linefmt='r-', markerfmt='ro', basefmt='k-', label=r'$h(-m)$')
+ax.set_title('2. Fold', fontsize=11)
+ax.set_xlabel('$m$'); ax.set_xlim(-7, 3); ax.set_ylim(-0.1, 1.3)
+ax.legend(fontsize=7); ax.grid(True, alpha=0.3)
+
+# Step 3: shift h(n-m) for n=3
+n_val = 3
+h_shift = 0.8**(n_val - m) * (n_val - m >= 0).astype(float)
+ax = axes[2]
+ax.stem(m, x, linefmt='b-', markerfmt='bo', basefmt='k-', label=r'$x(m)$')
+ax.stem(m, h_shift, linefmt='r-', markerfmt='ro', basefmt='k-', label=r'$h(3-m)$')
+ax.set_title(r'3. Shift  ($n=3$)', fontsize=11)
+ax.set_xlabel('$m$'); ax.set_xlim(-3, 7); ax.set_ylim(-0.1, 1.3)
+# highlight overlap
+ax.axvspan(0, 3, alpha=0.15, color='purple')
+ax.text(1.5, 0.7, 'overlap', ha='center', fontsize=9, color='purple')
+ax.legend(fontsize=7); ax.grid(True, alpha=0.3)
+
+# Step 4: result y(n) for each n
+n_vals = np.arange(-2, 8)
+y = np.array([np.sum(x * 0.8**((k - m) * ((k - m) >= 0)) * ((k - m) >= 0)) for k in n_vals])
+ax = axes[3]
+ax.stem(n_vals, y, linefmt='g-', markerfmt='go', basefmt='k-')
+ax.set_title(r'4. Result $y(n)$', fontsize=11)
+ax.set_xlabel('$n$'); ax.set_xlim(-2.5, 7.5); ax.set_ylim(-0.1, 3)
+ax.grid(True, alpha=0.3)
+
+fig.suptitle('Convolution Sum — Graphical Method  (Ch7.5)', fontsize=14, fontweight='bold')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch7_conv.png'))
+plt.close(fig)
+
+print("Chapter 7 figures saved.")
+
 print("Chapter 5 figures saved.")
