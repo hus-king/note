@@ -286,63 +286,86 @@ print("Figure 6 (bilateral ROC) saved.")
 # ============================================================
 
 # --- Ch6-1: Pole position → h(t) waveform mapping ---
-fig, axes = plt.subplots(2, 3, figsize=(14, 8))
+fig, axes = plt.subplots(2, 3, figsize=(15, 9))
+
+def add_splane_inset(ax, poles, color='r'):
+    """Add an s-plane inset in the upper-right corner with labeled pole positions"""
+    inset = ax.inset_axes([0.55, 0.55, 0.42, 0.43])
+    inset.axhline(0, color='gray', lw=0.8)
+    inset.axvline(0, color='gray', lw=0.8)
+    inset.set_xlim(-4, 4); inset.set_ylim(-5.5, 5.5)
+    inset.set_xticks([]); inset.set_yticks([])
+    # use fill_between to cover full y range
+    y_vals = np.linspace(-5.5, 5.5, 10)
+    inset.fill_betweenx(y_vals, -4, 0, alpha=0.07, color='green')
+    inset.fill_betweenx(y_vals, 0, 4, alpha=0.07, color='red')
+    for p in poles:
+        inset.plot(p[0], p[1], 'x', color=color, markersize=14, markeredgewidth=2.5)
+    inset.text(3.5, -0.8, r'$\sigma$', fontsize=8, color='gray')
+    inset.text(0.3, 5.0, r'$j\omega$', fontsize=8, color='gray')
+    inset.set_title('s-plane', fontsize=8, color='gray')
 
 # (a) Left-half real pole: e^{-αt}u(t)
 ax = axes[0, 0]
 t = np.linspace(0, 5, 500)
 ax.plot(t, np.exp(-1.5*t), 'b', lw=2)
-ax.set_title(r'Left real: $e^{-\alpha t}u(t)$', fontsize=11)
+ax.set_title(r'(a) Left real: $e^{-\alpha t}u(t)$', fontsize=10)
 ax.set_xlabel('$t$'); ax.set_xlim(0, 5); ax.set_ylim(-0.1, 1.2)
 ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
-ax.text(3.5, 0.8, r'$\to 0$', fontsize=11, color='green')
+ax.text(0.5, 0.8, r'$\to 0$', fontsize=11, color='green')
+add_splane_inset(ax, [(-1.5, 0)], 'r')
 
 # (b) Left-half complex conjugate: e^{-αt}sin(βt)
 ax = axes[0, 1]
 t = np.linspace(0, 8, 500)
 ax.plot(t, np.exp(-0.5*t)*np.sin(3*t), 'b', lw=1.5)
-ax.set_title(r'Left complex: $e^{-\alpha t}\sin(\beta t)$', fontsize=11)
+ax.set_title(r'(b) Left complex: $e^{-\alpha t}\sin(\beta t)$', fontsize=10)
 ax.set_xlabel('$t$'); ax.set_xlim(0, 8); ax.set_ylim(-1.1, 1.1)
 ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
-ax.text(5, 0.7, r'$\to 0$', fontsize=11, color='green')
+ax.text(0.5, 0.7, r'$\to 0$', fontsize=11, color='green')
+add_splane_inset(ax, [(-0.5, 3), (-0.5, -3)], 'r')
 
 # (c) jω-axis single pole: sin(βt) (steady)
 ax = axes[0, 2]
 t = np.linspace(0, 8, 500)
 ax.plot(t, np.sin(3*t), 'b', lw=1.5)
-ax.set_title(r'j$\omega$ single: $\sin(\beta t)$', fontsize=11)
+ax.set_title(r'(c) $j\omega$ single: $\sin(\beta t)$', fontsize=10)
 ax.set_xlabel('$t$'); ax.set_xlim(0, 8); ax.set_ylim(-1.3, 1.3)
 ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
-ax.text(5, 1.0, 'steady', fontsize=11, color='orange')
+ax.text(0.5, 0.9, 'steady', fontsize=11, color='orange')
+add_splane_inset(ax, [(0, 3), (0, -3)], 'orange')
 
 # (d) jω-axis double pole: t·sin(βt) (growing)
 ax = axes[1, 0]
 t = np.linspace(0, 8, 500)
 ax.plot(t, 0.2*t*np.sin(3*t), 'b', lw=1.5)
-ax.set_title(r'j$\omega$ double: $t\sin(\beta t)$', fontsize=11)
+ax.set_title(r'(d) $j\omega$ double: $t\sin(\beta t)$', fontsize=10)
 ax.set_xlabel('$t$'); ax.set_xlim(0, 8); ax.set_ylim(-2, 2)
 ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
-ax.text(5, 1.5, r'$\to\infty$', fontsize=11, color='red')
+ax.text(0.5, 1.5, r'$\to\infty$', fontsize=11, color='red')
+add_splane_inset(ax, [(0, 3.2), (0, 2.8), (0, -2.8), (0, -3.2)], 'red')  # double pole
 
 # (e) Right-half real pole: e^{αt}u(t) (diverging)
 ax = axes[1, 1]
 t = np.linspace(0, 3, 500)
 ax.plot(t, np.exp(1.5*t), 'b', lw=2)
-ax.set_title(r'Right real: $e^{\alpha t}u(t)$', fontsize=11)
+ax.set_title(r'(e) Right real: $e^{\alpha t}u(t)$', fontsize=10)
 ax.set_xlabel('$t$'); ax.set_xlim(0, 3); ax.set_ylim(-1, 20)
 ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
-ax.text(1.5, 15, r'$\to\infty$', fontsize=11, color='red')
+ax.text(0.3, 15, r'$\to\infty$', fontsize=11, color='red')
+add_splane_inset(ax, [(1.5, 0)], 'r')
 
 # (f) Right-half complex: e^{αt}sin(βt) (diverging oscillation)
 ax = axes[1, 2]
 t = np.linspace(0, 3, 500)
 ax.plot(t, np.exp(1.2*t)*np.sin(5*t), 'b', lw=1.5)
-ax.set_title(r'Right complex: $e^{\alpha t}\sin(\beta t)$', fontsize=11)
+ax.set_title(r'(f) Right complex: $e^{\alpha t}\sin(\beta t)$', fontsize=10)
 ax.set_xlabel('$t$'); ax.set_xlim(0, 3); ax.set_ylim(-15, 15)
 ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
-ax.text(1.5, 12, r'$\to\infty$', fontsize=11, color='red')
+ax.text(0.3, 12, r'$\to\infty$', fontsize=11, color='red')
+add_splane_inset(ax, [(1.2, 5), (1.2, -5)], 'r')
 
-fig.suptitle('Pole Position → $h(t)$ Waveform (Ch6.2)', fontsize=14, fontweight='bold')
+fig.suptitle('Pole Position → $h(t)$ Waveform  (Ch6.2)', fontsize=14, fontweight='bold')
 fig.tight_layout()
 fig.savefig(os.path.join(out, 'xh_ch6_pole_h.png'))
 plt.close(fig)
