@@ -48,26 +48,43 @@ plt.close(fig)
 # ============================================================
 # 2. Laplace vs Fourier — three cases
 # ============================================================
-fig, axes = plt.subplots(1, 3, figsize=(12, 4))
-cases = [
-    (r'$\sigma_0 > 0$', 'FT: NOT exist', 'LT exists'),
-    (r'$\sigma_0 < 0$', r'FT: $F(s)\vert_{s=j\omega}$', 'LT exists'),
-    (r'$\sigma_0 = 0$', r'FT: $F(s)|_{s=j\omega} +$ singular', 'LT exists'),
-]
-for ax, (title, ft, lt) in zip(axes, cases):
-    ax.axhline(0, color='gray', lw=0.8)
-    ax.axvline(0, color='gray', lw=0.8)
-    ax.set_xlim(-4, 4); ax.set_ylim(-3, 3)
-    ax.set_xlabel(r'$\sigma$'); ax.set_ylabel(r'$j\omega$', fontsize=9)
-    ax.set_title(title, fontsize=11)
-    ax.text(1.5, 2, ft, fontsize=10, color='red', ha='center')
-    ax.text(1.5, 1.2, lt, fontsize=10, color='green', ha='center')
-    # mark jω axis
-    ax.axvline(0, color='blue', lw=0.5, alpha=0.3)
-    ax.text(-0.3, 2.8, r'$j\omega$', fontsize=9, color='blue', alpha=0.6)
-    ax.grid(True, alpha=0.2)
+fig, axes = plt.subplots(1, 3, figsize=(13, 4.5))
 
-fig.suptitle('Laplace Transform vs Fourier Transform', fontsize=13, fontweight='bold')
+case_data = [
+    (r'$\sigma_0 > 0$', 'right', 'FT: does NOT exist', 'LT exists'),
+    (r'$\sigma_0 < 0$', 'left', r'FT: $F(j\omega)=F(s)|_{s=j\omega}$', 'LT exists'),
+    (r'$\sigma_0 = 0$', 'boundary', 'FT: exists (with singular term)', 'LT exists'),
+]
+
+for ax, (title, shade, ft, lt) in zip(axes, case_data):
+    ax.axhline(0, color='gray', lw=1)
+    ax.axvline(0, color='gray', lw=1)
+    ax.set_xlim(-4, 4); ax.set_ylim(-3, 3)
+    ax.set_xlabel(r'$\sigma$', fontsize=11)
+    ax.set_title(title, fontsize=12, fontweight='bold')
+    ax.grid(True, alpha=0.15)
+
+    ax.text(0.3, 2.8, r'$j\omega$', fontsize=9, color='blue', alpha=0.7)
+
+    if shade == 'right':
+        ax.axvspan(1, 4, alpha=0.15, color='green')
+        ax.axvline(1, color='green', linestyle='--', lw=1.5, label=r'$\sigma_0$')
+        ax.plot(1, 0, 'go', markersize=8)
+    elif shade == 'left':
+        ax.axvspan(-4, -1, alpha=0.15, color='green')
+        ax.axvline(-1, color='green', linestyle='--', lw=1.5, label=r'$\sigma_0$')
+        ax.plot(-1, 0, 'go', markersize=8)
+    elif shade == 'boundary':
+        ax.axvspan(-4, 4, alpha=0.1, color='green')
+        ax.axvline(0, color='green', linestyle='--', lw=1.5, alpha=0.5)
+
+    ax.text(2, 2.2, ft, fontsize=12, color='red', ha='center',
+            bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+    ax.text(2, 1.0, lt, fontsize=12, color='green', ha='center',
+            bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+    ax.legend(fontsize=8, loc='upper left')
+
+fig.suptitle('Laplace Transform vs Fourier Transform', fontsize=14, fontweight='bold')
 fig.tight_layout()
 fig.savefig(os.path.join(out, 'xh_ch5_lt_vs_ft.png'))
 plt.close(fig)
@@ -152,6 +169,70 @@ fig.suptitle('Basic Block Diagram Elements', fontsize=13, fontweight='bold')
 fig.tight_layout()
 plt.savefig(os.path.join(out, 'xh_ch5_blocks.png'))
 plt.close(fig)
+
+# ============================================================
+# 7. Triangular pulse — waveform + derivatives for LT methods
+# ============================================================
+fig, axes = plt.subplots(2, 2, figsize=(12, 7))
+
+t = np.linspace(-0.5, 2.5, 1000)
+# Triangular pulse
+f = np.where((t >= 0) & (t < 1), t, np.where((t >= 1) & (t <= 2), 2 - t, 0))
+# f'(t) = u(t) - 2u(t-1) + u(t-2)
+fp = np.heaviside(t, 1) - 2*np.heaviside(t-1, 1) + np.heaviside(t-2, 1)
+# f''(t) = δ(t) - 2δ(t-1) + δ(t-2)
+
+# --- Top-left: f(t) triangular pulse ---
+ax = axes[0, 0]
+ax.plot(t, f, 'b', lw=2); ax.fill_between(t, f, alpha=0.08, color='b')
+ax.set_title(r'$f(t)$: triangular pulse', fontsize=12)
+ax.set_xlabel('$t$'); ax.set_xlim(-0.5, 2.5); ax.set_ylim(-0.1, 1.3)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+for x in [0, 1, 2]:
+    ax.axvline(x, color='red', linestyle='--', lw=0.5, alpha=0.4)
+
+# --- Top-right: decomposition into ramps ---
+ax = axes[0, 1]
+t_plot = np.linspace(-0.5, 2.5, 1000)
+r1 = np.maximum(t_plot, 0)  # t·u(t)
+r2 = -2 * np.maximum(t_plot - 1, 0)  # -2(t-1)u(t-1)
+r3 = np.maximum(t_plot - 2, 0)  # (t-2)u(t-2)
+ax.plot(t_plot, r1, 'b--', lw=1, alpha=0.6, label=r'$t\,u(t)$')
+ax.plot(t_plot, r2, 'r--', lw=1, alpha=0.6, label=r'$-2(t-1)u(t-1)$')
+ax.plot(t_plot, r3, 'g--', lw=1, alpha=0.6, label=r'$(t-2)u(t-2)$')
+ax.plot(t_plot, r1+r2+r3, 'k', lw=2, label='sum')
+ax.set_title(r'Method 2: $f=t u(t)-2(t-1)u(t-1)+(t-2)u(t-2)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(-0.5, 2.5); ax.set_ylim(-2, 1.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.legend(fontsize=7.5, loc='lower left')
+
+# --- Bottom-left: f'(t) ---
+ax = axes[1, 0]
+ax.plot(t, fp, 'b', lw=2)
+ax.fill_between(t[t<1], fp[t<1], alpha=0.08, color='b')
+ax.fill_between(t[(t>=1)&(t<2)], fp[(t>=1)&(t<2)], alpha=0.08, color='r')
+ax.set_title(r"$f'(t) = u(t) - 2u(t-1) + u(t-2)$", fontsize=12)
+ax.set_xlabel('$t$'); ax.set_xlim(-0.5, 2.5); ax.set_ylim(-2.5, 1.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+
+# --- Bottom-right: f''(t) impulse train ---
+ax = axes[1, 1]
+ax.annotate('', xy=(0, 1), xytext=(0, 0), arrowprops=dict(arrowstyle='->', color='b', lw=2.5))
+ax.text(0.2, 0.55, '1', fontsize=11, color='b')
+ax.annotate('', xy=(1, -2), xytext=(1, 0), arrowprops=dict(arrowstyle='->', color='r', lw=2.5))
+ax.text(1.2, -1.5, '-2', fontsize=11, color='r')
+ax.annotate('', xy=(2, 1), xytext=(2, 0), arrowprops=dict(arrowstyle='->', color='g', lw=2.5))
+ax.text(2.2, 0.55, '1', fontsize=11, color='g')
+ax.set_title(r"$f''(t) = \delta(t) - 2\delta(t-1) + \delta(t-2)$", fontsize=12)
+ax.set_xlabel('$t$'); ax.set_xlim(-0.5, 2.5); ax.set_ylim(-2.5, 1.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.2)
+
+fig.suptitle('Example 2: Triangular Pulse — Four LT Methods', fontsize=14, fontweight='bold')
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_ch5_triangle_lt.png'))
+plt.close(fig)
+
+print("Figure 7 (triangular pulse) saved.")
 
 # ============================================================
 # 6. Bilateral ROC example — strip of convergence
