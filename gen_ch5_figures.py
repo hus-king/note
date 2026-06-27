@@ -281,4 +281,181 @@ plt.close(fig)
 
 print("Figure 6 (bilateral ROC) saved.")
 
+# ============================================================
+# Chapter 6 figures
+# ============================================================
+
+# --- Ch6-1: Pole position → h(t) waveform mapping ---
+fig, axes = plt.subplots(2, 3, figsize=(14, 8))
+
+# (a) Left-half real pole: e^{-αt}u(t)
+ax = axes[0, 0]
+t = np.linspace(0, 5, 500)
+ax.plot(t, np.exp(-1.5*t), 'b', lw=2)
+ax.set_title(r'Left real: $e^{-\alpha t}u(t)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(0, 5); ax.set_ylim(-0.1, 1.2)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(3.5, 0.8, r'$\to 0$', fontsize=11, color='green')
+
+# (b) Left-half complex conjugate: e^{-αt}sin(βt)
+ax = axes[0, 1]
+t = np.linspace(0, 8, 500)
+ax.plot(t, np.exp(-0.5*t)*np.sin(3*t), 'b', lw=1.5)
+ax.set_title(r'Left complex: $e^{-\alpha t}\sin(\beta t)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(0, 8); ax.set_ylim(-1.1, 1.1)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(5, 0.7, r'$\to 0$', fontsize=11, color='green')
+
+# (c) jω-axis single pole: sin(βt) (steady)
+ax = axes[0, 2]
+t = np.linspace(0, 8, 500)
+ax.plot(t, np.sin(3*t), 'b', lw=1.5)
+ax.set_title(r'j$\omega$ single: $\sin(\beta t)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(0, 8); ax.set_ylim(-1.3, 1.3)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(5, 1.0, 'steady', fontsize=11, color='orange')
+
+# (d) jω-axis double pole: t·sin(βt) (growing)
+ax = axes[1, 0]
+t = np.linspace(0, 8, 500)
+ax.plot(t, 0.2*t*np.sin(3*t), 'b', lw=1.5)
+ax.set_title(r'j$\omega$ double: $t\sin(\beta t)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(0, 8); ax.set_ylim(-2, 2)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(5, 1.5, r'$\to\infty$', fontsize=11, color='red')
+
+# (e) Right-half real pole: e^{αt}u(t) (diverging)
+ax = axes[1, 1]
+t = np.linspace(0, 3, 500)
+ax.plot(t, np.exp(1.5*t), 'b', lw=2)
+ax.set_title(r'Right real: $e^{\alpha t}u(t)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(0, 3); ax.set_ylim(-1, 20)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(1.5, 15, r'$\to\infty$', fontsize=11, color='red')
+
+# (f) Right-half complex: e^{αt}sin(βt) (diverging oscillation)
+ax = axes[1, 2]
+t = np.linspace(0, 3, 500)
+ax.plot(t, np.exp(1.2*t)*np.sin(5*t), 'b', lw=1.5)
+ax.set_title(r'Right complex: $e^{\alpha t}\sin(\beta t)$', fontsize=11)
+ax.set_xlabel('$t$'); ax.set_xlim(0, 3); ax.set_ylim(-15, 15)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.text(1.5, 12, r'$\to\infty$', fontsize=11, color='red')
+
+fig.suptitle('Pole Position → $h(t)$ Waveform (Ch6.2)', fontsize=14, fontweight='bold')
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_ch6_pole_h.png'))
+plt.close(fig)
+
+# --- Ch6-2: Vector method for frequency response ---
+fig, ax = plt.subplots(figsize=(8, 6))
+# s-plane with axes
+ax.axhline(0, color='gray', lw=1)
+ax.axvline(0, color='gray', lw=1)
+ax.set_xlim(-5, 2); ax.set_ylim(-4, 4)
+ax.set_xlabel(r'$\sigma$', fontsize=12); ax.set_ylabel(r'$j\omega$', fontsize=12)
+
+# Poles (×) and zeros (○)
+# Example: one zero at origin, one pole at -1
+zero = (0, 0)
+pole = (-1.5, 0)
+ax.plot(zero[0], zero[1], 'ko', markersize=12, markerfacecolor='none', markeredgewidth=2)
+ax.text(zero[0]+0.2, zero[1]+0.3, 'o (zero)', fontsize=10)
+ax.plot(pole[0], pole[1], 'rx', markersize=14, markeredgewidth=2)
+ax.text(pole[0]+0.2, pole[1]+0.3, r'$\times$ (pole)', fontsize=10, color='red')
+
+# jω point at ω=2
+jomega = (0, 2.5)
+ax.plot(jomega[0], jomega[1], 'b.', markersize=10)
+ax.text(jomega[0]+0.15, jomega[1]+0.1, r'$j\omega$', fontsize=11, color='blue')
+
+# Vector from zero to jω: B∠β
+ax.annotate('', xy=jomega, xytext=zero,
+            arrowprops=dict(arrowstyle='->', color='green', lw=2))
+mid_b = ((zero[0]+jomega[0])/2 + 0.2, (zero[1]+jomega[1])/2)
+ax.text(mid_b[0], mid_b[1], r'$B e^{j\beta}$', fontsize=10, color='green')
+
+# Vector from pole to jω: A∠α
+ax.annotate('', xy=jomega, xytext=pole,
+            arrowprops=dict(arrowstyle='->', color='red', lw=2))
+mid_a = ((pole[0]+jomega[0])/2 - 0.4, (pole[1]+jomega[1])/2)
+ax.text(mid_a[0], mid_a[1], r'$A e^{j\alpha}$', fontsize=10, color='red')
+
+ax.set_title(r'Vector Method: $H(j\omega)=H_0\frac{B}{A}e^{j(\beta-\alpha)}$', fontsize=13, fontweight='bold')
+ax.grid(True, alpha=0.2)
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_ch6_vector.png'))
+plt.close(fig)
+
+# --- Ch6-3: RC high-pass filter |H(jω)| ---
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+tau = 1  # RC
+w = np.logspace(-2, 2, 500)
+Hmag = w / np.sqrt(w**2 + 1/tau**2)
+phi = np.pi/2 - np.arctan(w*tau)
+
+axes[0].semilogx(w, Hmag, 'b', lw=2)
+axes[0].axhline(1/np.sqrt(2), color='gray', linestyle='--', lw=0.6, alpha=0.5)
+axes[0].axvline(1/tau, color='red', linestyle='--', lw=0.6, alpha=0.5, label=r'$\omega_c=1/RC$')
+axes[0].set_title(r'$|H(j\omega)|$', fontsize=12)
+axes[0].set_xlabel(r'$\omega$'); axes[0].set_ylabel(r'$|H|$')
+axes[0].set_ylim(-0.05, 1.1)
+axes[0].axhline(0, color='gray', lw=0.5); axes[0].grid(True, alpha=0.3)
+axes[0].legend(fontsize=8)
+
+axes[1].semilogx(w, phi, 'r', lw=2)
+axes[1].axhline(np.pi/4, color='gray', linestyle='--', lw=0.6, alpha=0.5)
+axes[1].axvline(1/tau, color='red', linestyle='--', lw=0.6, alpha=0.5)
+axes[1].set_title(r'$\varphi(\omega)$', fontsize=12)
+axes[1].set_xlabel(r'$\omega$'); axes[1].set_ylabel(r'$\varphi$')
+axes[1].axhline(0, color='gray', lw=0.5); axes[1].grid(True, alpha=0.3)
+
+fig.suptitle(r'RC High-Pass Filter: $H(s)=\frac{s}{s+1/RC}$', fontsize=13, fontweight='bold')
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_ch6_rc_hp.png'))
+plt.close(fig)
+
+# --- Ch6-4: Stability regions in s-plane ---
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.axhline(0, color='gray', lw=1)
+ax.axvline(0, color='gray', lw=1)
+ax.set_xlim(-5, 3); ax.set_ylim(-4, 4)
+ax.set_xlabel(r'$\sigma$', fontsize=12); ax.set_ylabel(r'$j\omega$', fontsize=12)
+
+# Left half-plane: stable
+ax.axvspan(-5, 0, alpha=0.1, color='green')
+ax.text(-2.5, 3, 'STABLE', fontsize=14, color='green', ha='center', fontweight='bold',
+        alpha=0.5)
+ax.text(-2.5, 2, r'Re$[p_i] < 0$', fontsize=10, color='green', ha='center')
+
+# Right half-plane: unstable
+ax.axvspan(0, 3, alpha=0.1, color='red')
+ax.text(1.5, 3, 'UNSTABLE', fontsize=14, color='red', ha='center', fontweight='bold',
+        alpha=0.5)
+ax.text(1.5, 2, r'Re$[p_i] > 0$', fontsize=10, color='red', ha='center')
+
+# jω axis: critically stable
+ax.axvline(0, color='orange', lw=3, alpha=0.5, label=r'Re$[p_i]=0$ (critical)')
+ax.text(0.3, -0.3, 'critical', fontsize=9, color='orange', rotation=90)
+
+# Example poles
+# Stable pole
+ax.plot(-2, 1.5, 'go', markersize=10)
+ax.text(-2+0.2, 1.5, 'stable pole', fontsize=9, color='green')
+# Unstable pole
+ax.plot(1.5, -1.5, 'ro', markersize=10)
+ax.text(1.5+0.2, -1.5, 'unstable pole', fontsize=9, color='red')
+# Critical pole (single, on jω)
+ax.plot(0, 2.5, 'o', color='orange', markersize=10)
+ax.text(0+0.2, 2.5, 'crit. pole (single)', fontsize=9, color='orange')
+
+ax.set_title('Stability Regions in s-Plane', fontsize=13, fontweight='bold')
+ax.legend(fontsize=9, loc='lower right')
+ax.grid(True, alpha=0.2)
+fig.tight_layout()
+fig.savefig(os.path.join(out, 'xh_ch6_stability.png'))
+plt.close(fig)
+
+print("Chapter 6 figures saved.")
+
 print("Chapter 5 figures saved.")
