@@ -660,4 +660,198 @@ plt.close(fig)
 
 print("Chapter 7 figures saved.")
 
+# ============================================================
+# Staircase signal (Ch5.4.2 time-shift example)
+# ============================================================
+fig, ax = plt.subplots(figsize=(9, 4))
+E = 4; T = 4
+t = np.linspace(-0.5, 5.5, 2000)
+
+# Build staircase
+f = (E/4) * (np.heaviside(t, 1) + np.heaviside(t - T/4, 1) +
+             np.heaviside(t - T/2, 1) + np.heaviside(t - 3*T/4, 1) -
+             4 * np.heaviside(t - T, 1))
+
+ax.plot(t, f, 'b', lw=2)
+# mark step levels
+for x in [0, T/4, T/2, 3*T/4, T]:
+    ax.axvline(x, color='red', linestyle='--', lw=0.6, alpha=0.4)
+# y-value annotations
+ax.text(-0.3, E/4, r'$E/4$', ha='right', va='center', fontsize=10, color='gray')
+ax.text(-0.3, E/2, r'$E/2$', ha='right', va='center', fontsize=10, color='gray')
+ax.text(-0.3, 3*E/4, r'$3E/4$', ha='right', va='center', fontsize=10, color='gray')
+ax.text(-0.3, E, r'$E$', ha='right', va='center', fontsize=10, color='gray')
+
+ax.set_title(r'Staircase signal (Time-Shift example)', fontsize=13)
+ax.set_xlabel('$t$'); ax.set_xlim(-0.5, 5.5); ax.set_ylim(-0.2, E+0.5)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+ax.set_xticks([0, T/4, T/2, 3*T/4, T])
+ax.set_xticklabels(['0', r'$T/4$', r'$T/2$', r'$3T/4$', r'$T$'])
+
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch5_staircase.png'))
+plt.close(fig)
+
+print("Staircase figure saved.")
+
+# ============================================================
+# Chapter 8 figures
+# ============================================================
+
+# --- Ch8-1: s-plane to z-plane mapping ---
+fig, axes = plt.subplots(1, 2, figsize=(11, 5))
+
+# Left: s-plane
+ax = axes[0]
+ax.axhline(0, color='gray', lw=0.8)
+ax.axvline(0, color='gray', lw=0.8)
+ax.set_xlim(-5, 3); ax.set_ylim(-4, 4)
+ax.set_xlabel(r'$\sigma$', fontsize=12); ax.set_ylabel(r'$j\omega$', fontsize=12)
+ax.set_title('s-plane', fontsize=13, fontweight='bold')
+# Shade left half-plane green (stable)
+ax.axvspan(-5, 0, alpha=0.08, color='green')
+ax.text(-2.5, 3.5, 'STABLE', fontsize=12, color='green', ha='center', alpha=0.6)
+# right half-plane red
+ax.axvspan(0, 3, alpha=0.08, color='red')
+ax.text(1.5, 3.5, 'UNSTABLE', fontsize=12, color='red', ha='center', alpha=0.6)
+ax.text(0.3, -0.4, r'$j\omega$ axis', fontsize=9, color='orange')
+# Example strip for sampling mapping
+ax.axhspan(-np.pi, np.pi, alpha=0.1, color='blue')
+ax.text(-4.5, 1.5, r'$-\pi/T$ to $\pi/T$', fontsize=8, color='blue', rotation=90)
+ax.grid(True, alpha=0.2)
+
+# Right: z-plane
+ax = axes[1]
+theta = np.linspace(0, 2*np.pi, 200)
+ax.plot(np.cos(theta), np.sin(theta), 'b', lw=2, label='unit circle')
+ax.axhline(0, color='gray', lw=0.8)
+ax.axvline(0, color='gray', lw=0.8)
+ax.set_xlim(-3, 3); ax.set_ylim(-3, 3)
+ax.set_xlabel(r'$\mathrm{Re}(z)$', fontsize=12); ax.set_ylabel(r'$\mathrm{Im}(z)$', fontsize=12)
+ax.set_title('z-plane', fontsize=13, fontweight='bold')
+# Stable region: inside unit circle
+ax.fill_between(np.linspace(-1, 1, 100), -np.sqrt(1-np.linspace(-1,1,100)**2),
+                np.sqrt(1-np.linspace(-1,1,100)**2), alpha=0.08, color='green')
+ax.text(0, 0.3, 'STABLE\n(inside)', ha='center', fontsize=10, color='green', alpha=0.6)
+# Unstable region
+ax.text(2, 2, 'UNSTABLE\n(outside)', ha='center', fontsize=10, color='red', alpha=0.6)
+# Mapping arrow
+ax.annotate(r'$e^{j\omega}$', xy=(0.7, 0.7), fontsize=9, color='blue')
+ax.legend(fontsize=9)
+ax.grid(True, alpha=0.2)
+fig.suptitle(r's-Plane $\to$ z-Plane Mapping  ($z=e^{sT}$)', fontsize=14, fontweight='bold')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch8_s2z.png'))
+plt.close(fig)
+
+# --- Ch8-2: ROC types in z-plane ---
+fig, axes = plt.subplots(1, 4, figsize=(14, 3.5))
+
+theta = np.linspace(0, 2*np.pi, 200)
+
+labels = [
+        'Right-sided\n$|z|>R_{x1}$',
+        'Left-sided\n$|z|<R_{x2}$',
+        'Two-sided\n$R_{x1}<|z|<R_{x2}$',
+        'Finite-length\nall $z$ except $0,\\infty$',
+    ]
+for i, (ax, title) in enumerate(zip(axes, labels)):
+    ax.plot(np.cos(theta), np.sin(theta), 'gray', lw=0.8, alpha=0.5)
+    ax.axhline(0, color='gray', lw=0.5)
+    ax.axvline(0, color='gray', lw=0.5)
+    ax.set_xlim(-3, 3); ax.set_ylim(-3, 3)
+    ax.set_title(title, fontsize=10)
+    ax.set_xticks([]); ax.set_yticks([])
+
+    if i == 0:  # outside circle
+        radius = 1.2
+        ax.plot(radius*np.cos(theta), radius*np.sin(theta), 'b', lw=1.5, label=r'$R_{x1}$')
+        ax.axvspan(-3, 3, alpha=0.1, color='green', ymin=0.05, ymax=0.95)
+        # but mask inside the circle
+        r = np.linspace(radius, 3, 5)
+        for rad in r:
+            ax.plot(rad*np.cos(theta), rad*np.sin(theta), 'b', lw=0.5, alpha=0.3)
+        ax.legend(fontsize=8)
+    elif i == 1:  # inside circle
+        radius = 1.8
+        ax.plot(radius*np.cos(theta), radius*np.sin(theta), 'r', lw=1.5, label=r'$R_{x2}$')
+        ax.fill_betweenx([-radius, radius], -radius, radius, alpha=0.1, color='green')
+        ax.legend(fontsize=8)
+    elif i == 2:  # ring
+        r1, r2 = 0.8, 2.2
+        ax.plot(r1*np.cos(theta), r1*np.sin(theta), 'b', lw=1.2, label=r'$R_{x1}$')
+        ax.plot(r2*np.cos(theta), r2*np.sin(theta), 'r', lw=1.2, label=r'$R_{x2}$')
+        # Shade ring
+        shade_r = np.linspace(r1, r2, 20)
+        for rad in shade_r[::3]:
+            ax.plot(rad*np.cos(theta), rad*np.sin(theta), 'purple', lw=0.3, alpha=0.3)
+        ax.legend(fontsize=8)
+    elif i == 3:  # entire plane
+        ax.axvspan(-3, 3, alpha=0.1, color='green', ymin=0.05, ymax=0.95)
+        ax.text(0, 0.5, 'entire plane', ha='center', fontsize=11, color='green')
+        ax.plot(0, 0, 'ro', markersize=5, alpha=0.5)
+        ax.text(0.3, 0.1, '$z=0$ excluded', fontsize=7, color='red')
+
+fig.suptitle('ROC Types in z-Plane (Ch8.1)', fontsize=13, fontweight='bold')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch8_roc.png'))
+plt.close(fig)
+
+# --- Ch8-3: DTFT periodicity (|X(e^{jω})|) ---
+fig, ax = plt.subplots(figsize=(9, 4))
+omega = np.linspace(-4*np.pi, 4*np.pi, 2000)
+# Simulated DTFT magnitude for a rectangular window of width 5
+X_mag = np.abs(np.sin(2.5*omega)/(np.sin(0.5*omega) + 1e-10))
+ax.plot(omega, X_mag, 'b', lw=1.5)
+ax.set_title(r'DTFT Magnitude: $|X(e^{j\omega})|$  — Periodic with $2\pi$', fontsize=13)
+ax.set_xlabel(r'$\omega$'); ax.set_ylabel(r'$|X(e^{j\omega})|$')
+ax.set_xlim(-4*np.pi, 4*np.pi)
+ax.axhline(0, color='gray', lw=0.5); ax.grid(True, alpha=0.3)
+# Mark periods
+for x in [-2*np.pi, 0, 2*np.pi]:
+    ax.axvline(x, color='red', linestyle='--', lw=0.6, alpha=0.5)
+ax.annotate('', xy=(-2*np.pi, 5), xytext=(0, 5),
+            arrowprops=dict(arrowstyle='<->', color='red', lw=1.2))
+ax.text(-np.pi, 5.3, r'$2\pi$', ha='center', fontsize=11, color='red')
+ax.annotate('', xy=(0, 5), xytext=(2*np.pi, 5),
+            arrowprops=dict(arrowstyle='<->', color='red', lw=1.2))
+ax.text(np.pi, 5.3, r'$2\pi$', ha='center', fontsize=11, color='red')
+# useful range
+ax.axvspan(-np.pi, np.pi, alpha=0.06, color='green')
+ax.text(0, 4.5, 'useful range', ha='center', fontsize=10, color='green')
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch8_dtft.png'))
+plt.close(fig)
+
+# --- Ch8-4: Stability regions in z-plane ---
+fig, ax = plt.subplots(figsize=(7, 7))
+theta = np.linspace(0, 2*np.pi, 300)
+ax.plot(np.cos(theta), np.sin(theta), 'b', lw=2.5, label='unit circle')
+ax.axhline(0, color='gray', lw=0.8)
+ax.axvline(0, color='gray', lw=0.8)
+ax.set_xlim(-2.5, 2.5); ax.set_ylim(-2.5, 2.5)
+ax.set_xlabel(r'$\mathrm{Re}(z)$', fontsize=12); ax.set_ylabel(r'$\mathrm{Im}(z)$', fontsize=12)
+
+# Stable inside
+ax.fill_between(np.linspace(-1, 1, 100), -np.sqrt(1-np.linspace(-1,1,100)**2),
+                np.sqrt(1-np.linspace(-1,1,100)**2), alpha=0.1, color='green')
+ax.text(0, 0.2, 'STABLE\n$|p_i|<1$', ha='center', fontsize=11, color='green', fontweight='bold')
+
+# Example points
+ax.plot(0.5, 0.5, 'go', markersize=12)
+ax.text(0.7, 0.5, 'stable pole', fontsize=10, color='green')
+ax.plot(0, 1, 'o', color='orange', markersize=12)
+ax.text(0.2, 1.1, 'critical', fontsize=9, color='orange')
+ax.plot(1.5, 0.8, 'ro', markersize=12)
+ax.text(1.7, 0.8, 'unstable pole', fontsize=10, color='red')
+
+ax.set_title('Stability in z-Plane: Poles Inside Unit Circle', fontsize=13, fontweight='bold')
+ax.legend(fontsize=9)
+ax.grid(True, alpha=0.2)
+fig.tight_layout()
+plt.savefig(os.path.join(out, 'xh_ch8_stability.png'))
+plt.close(fig)
+
+print("Chapter 8 figures saved.")
+
 print("Chapter 5 figures saved.")
