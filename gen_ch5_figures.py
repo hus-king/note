@@ -699,46 +699,52 @@ print("Staircase figure saved.")
 # ============================================================
 
 # --- Ch8-1: s-plane to z-plane mapping ---
-fig, axes = plt.subplots(1, 2, figsize=(11, 5))
+fig, axes = plt.subplots(1, 2, figsize=(12, 5.5))
 
 # Left: s-plane
 ax = axes[0]
 ax.axhline(0, color='gray', lw=0.8)
 ax.axvline(0, color='gray', lw=0.8)
 ax.set_xlim(-5, 3); ax.set_ylim(-4, 4)
+ax.set_aspect('equal')
 ax.set_xlabel(r'$\sigma$', fontsize=12); ax.set_ylabel(r'$j\omega$', fontsize=12)
-ax.set_title('s-plane', fontsize=13, fontweight='bold')
-# Shade left half-plane green (stable)
-ax.axvspan(-5, 0, alpha=0.08, color='green')
-ax.text(-2.5, 3.5, 'STABLE', fontsize=12, color='green', ha='center', alpha=0.6)
-# right half-plane red
-ax.axvspan(0, 3, alpha=0.08, color='red')
-ax.text(1.5, 3.5, 'UNSTABLE', fontsize=12, color='red', ha='center', alpha=0.6)
-ax.text(0.3, -0.4, r'$j\omega$ axis', fontsize=9, color='orange')
-# Example strip for sampling mapping
-ax.axhspan(-np.pi, np.pi, alpha=0.1, color='blue')
-ax.text(-4.5, 1.5, r'$-\pi/T$ to $\pi/T$', fontsize=8, color='blue', rotation=90)
+ax.set_title('s-plane', fontsize=14, fontweight='bold')
+# Left half-plane: stable (green)
+ax.axvspan(-5, 0, alpha=0.15, color='green')
+ax.text(-2.5, 3.5, r'STABLE  ($\sigma<0$)', fontsize=12, color='green', ha='center', fontweight='bold')
+# Right half-plane: unstable (red)
+ax.axvspan(0, 3, alpha=0.15, color='red')
+ax.text(1.5, 3.5, r'UNSTABLE  ($\sigma>0$)', fontsize=12, color='red', ha='center', fontweight='bold')
+ax.text(0.3, -0.5, r'$j\omega$ axis  ($\sigma=0$)', fontsize=9, color='orange')
+# Mapping arrows
+# σ < 0 region → inside unit circle
+ax.annotate(r'$\sigma<0 \to |z|<1$', xy=(-2, 0), fontsize=9, color='green',
+            ha='center', va='top',
+            bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+# σ > 0 region → outside unit circle
+ax.annotate(r'$\sigma>0 \to |z|>1$', xy=(2, 0), fontsize=9, color='red',
+            ha='center', va='top',
+            bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
 ax.grid(True, alpha=0.2)
 
 # Right: z-plane
 ax = axes[1]
-theta = np.linspace(0, 2*np.pi, 200)
-ax.plot(np.cos(theta), np.sin(theta), 'b', lw=2, label='unit circle')
+theta = np.linspace(0, 2*np.pi, 300)
+ax.plot(np.cos(theta), np.sin(theta), 'b', lw=2.5, label='unit circle ($|z|=1$)')
 ax.axhline(0, color='gray', lw=0.8)
 ax.axvline(0, color='gray', lw=0.8)
 ax.set_xlim(-3, 3); ax.set_ylim(-3, 3)
+ax.set_aspect('equal')
 ax.set_xlabel(r'$\mathrm{Re}(z)$', fontsize=12); ax.set_ylabel(r'$\mathrm{Im}(z)$', fontsize=12)
-ax.set_title('z-plane', fontsize=13, fontweight='bold')
-# Stable region: inside unit circle
-ax.fill_between(np.linspace(-1, 1, 100), -np.sqrt(1-np.linspace(-1,1,100)**2),
-                np.sqrt(1-np.linspace(-1,1,100)**2), alpha=0.08, color='green')
-ax.text(0, 0.3, 'STABLE\n(inside)', ha='center', fontsize=10, color='green', alpha=0.6)
-# Unstable region
-ax.text(2, 2, 'UNSTABLE\n(outside)', ha='center', fontsize=10, color='red', alpha=0.6)
-# Mapping arrow
-ax.annotate(r'$e^{j\omega}$', xy=(0.7, 0.7), fontsize=9, color='blue')
-ax.legend(fontsize=9)
+ax.set_title('z-plane', fontsize=14, fontweight='bold')
+# Inside unit circle: green (stable), outside: no fill
+Rz, Tz = np.meshgrid(np.linspace(0, 3, 80), np.linspace(0, 2*np.pi, 300))
+Xz, Yz = Rz * np.cos(Tz), Rz * np.sin(Tz)
+ax.pcolormesh(Xz, Yz, np.where(Rz <= 1, 1.0, 0.0), cmap=plt.cm.Greens, alpha=0.2, vmin=0, vmax=1)
+ax.text(0, 0, 'STABLE\n$|z|<1$', ha='center', fontsize=10, color='green', fontweight='bold')
+ax.legend(fontsize=9, loc='lower right')
 ax.grid(True, alpha=0.2)
+
 fig.suptitle(r's-Plane $\to$ z-Plane Mapping  ($z=e^{sT}$)', fontsize=14, fontweight='bold')
 fig.tight_layout()
 plt.savefig(os.path.join(out, 'xh_ch8_s2z.png'))
@@ -747,50 +753,55 @@ plt.close(fig)
 # --- Ch8-2: ROC types in z-plane ---
 fig, axes = plt.subplots(1, 4, figsize=(14, 3.5))
 
-theta = np.linspace(0, 2*np.pi, 200)
+theta = np.linspace(0, 2*np.pi, 300)
+r_grid = np.linspace(0, 3, 50)
+R, T = np.meshgrid(r_grid, theta)
+X_bg, Y_bg = R * np.cos(T), R * np.sin(T)
 
 labels = [
-        'Right-sided\n$|z|>R_{x1}$',
-        'Left-sided\n$|z|<R_{x2}$',
-        'Two-sided\n$R_{x1}<|z|<R_{x2}$',
-        'Finite-length\nall $z$ except $0,\\infty$',
+        r'Right-sided: $|z|>R_{x1}$',
+        r'Left-sided: $|z|<R_{x2}$',
+        r'Two-sided: $R_{x1}<|z|<R_{x2}$',
+        r'Finite-length: all $z$ exc. $0,\infty$',
     ]
-for i, (ax, title) in enumerate(zip(axes, labels)):
-    ax.plot(np.cos(theta), np.sin(theta), 'gray', lw=0.8, alpha=0.5)
-    ax.axhline(0, color='gray', lw=0.5)
-    ax.axvline(0, color='gray', lw=0.5)
-    ax.set_xlim(-3, 3); ax.set_ylim(-3, 3)
-    ax.set_title(title, fontsize=10)
-    ax.set_xticks([]); ax.set_yticks([])
 
-    if i == 0:  # outside circle
-        radius = 1.2
-        ax.plot(radius*np.cos(theta), radius*np.sin(theta), 'b', lw=1.5, label=r'$R_{x1}$')
-        ax.axvspan(-3, 3, alpha=0.1, color='green', ymin=0.05, ymax=0.95)
-        # but mask inside the circle
-        r = np.linspace(radius, 3, 5)
-        for rad in r:
-            ax.plot(rad*np.cos(theta), rad*np.sin(theta), 'b', lw=0.5, alpha=0.3)
-        ax.legend(fontsize=8)
-    elif i == 1:  # inside circle
-        radius = 1.8
-        ax.plot(radius*np.cos(theta), radius*np.sin(theta), 'r', lw=1.5, label=r'$R_{x2}$')
-        ax.fill_betweenx([-radius, radius], -radius, radius, alpha=0.1, color='green')
-        ax.legend(fontsize=8)
-    elif i == 2:  # ring
-        r1, r2 = 0.8, 2.2
-        ax.plot(r1*np.cos(theta), r1*np.sin(theta), 'b', lw=1.2, label=r'$R_{x1}$')
-        ax.plot(r2*np.cos(theta), r2*np.sin(theta), 'r', lw=1.2, label=r'$R_{x2}$')
-        # Shade ring
-        shade_r = np.linspace(r1, r2, 20)
-        for rad in shade_r[::3]:
-            ax.plot(rad*np.cos(theta), rad*np.sin(theta), 'purple', lw=0.3, alpha=0.3)
-        ax.legend(fontsize=8)
-    elif i == 3:  # entire plane
-        ax.axvspan(-3, 3, alpha=0.1, color='green', ymin=0.05, ymax=0.95)
-        ax.text(0, 0.5, 'entire plane', ha='center', fontsize=11, color='green')
-        ax.plot(0, 0, 'ro', markersize=5, alpha=0.5)
-        ax.text(0.3, 0.1, '$z=0$ excluded', fontsize=7, color='red')
+for i, (ax, title) in enumerate(zip(axes, labels)):
+    ax.set_xlim(-3, 3); ax.set_ylim(-3, 3)
+    ax.set_aspect('equal')
+    ax.set_xticks([]); ax.set_yticks([])
+    ax.set_title(title, fontsize=10)
+    ax.grid(True, alpha=0.15)
+
+    if i == 0:  # Right: ROC outside radius R_x1 = 1.2
+        R_x1 = 1.2
+        # Shade only the annulus R_x1 to 3
+        mask = R >= R_x1
+        shade = np.where(mask, 1.0, 0.0)
+        ax.pcolormesh(X_bg, Y_bg, shade, cmap=plt.cm.Greens, alpha=0.25, vmin=0, vmax=1)
+        ax.plot(R_x1*np.cos(theta), R_x1*np.sin(theta), 'b', lw=2.5, label=r'$R_{x1}$')
+        ax.legend(fontsize=9, loc='lower right')
+
+    elif i == 1:  # Left: ROC inside radius R_x2 = 2.0
+        R_x2 = 2.0
+        mask = R <= R_x2
+        shade = np.where(mask, 1.0, 0.0)
+        ax.pcolormesh(X_bg, Y_bg, shade, cmap=plt.cm.Greens, alpha=0.25, vmin=0, vmax=1)
+        ax.plot(R_x2*np.cos(theta), R_x2*np.sin(theta), 'r', lw=2.5, label=r'$R_{x2}$')
+        ax.legend(fontsize=9, loc='lower right')
+
+    elif i == 2:  # Two-sided: ring R_x1 to R_x2
+        R_x1, R_x2 = 0.8, 2.2
+        mask = (R >= R_x1) & (R <= R_x2)
+        shade = np.where(mask, 1.0, 0.0)
+        ax.pcolormesh(X_bg, Y_bg, shade, cmap=plt.cm.Greens, alpha=0.3, vmin=0, vmax=1)
+        ax.plot(R_x1*np.cos(theta), R_x1*np.sin(theta), 'b', lw=2, label=r'$R_{x1}$')
+        ax.plot(R_x2*np.cos(theta), R_x2*np.sin(theta), 'r', lw=2, label=r'$R_{x2}$')
+        ax.legend(fontsize=9, loc='lower right')
+
+    elif i == 3:  # Entire plane — shade full rectangle
+        ax.fill_between([-3, 3], -3, 3, alpha=0.15, color='green')
+        ax.plot(0, 0, 'ko', markersize=6, markerfacecolor='none')
+        ax.text(0.3, -0.3, r'$z=0$ exc.', fontsize=8, color='gray')
 
 fig.suptitle('ROC Types in z-Plane (Ch8.1)', fontsize=13, fontweight='bold')
 fig.tight_layout()
