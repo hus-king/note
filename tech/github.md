@@ -41,7 +41,13 @@ git config --global https.proxy https://127.0.0.1:1080
 ## 二、配置GitHub CLI
 使用 Snap 安装
 ```bash
-sudo snap install gh
+# 添加github cli apt源
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+sudo apt update
+
+sudo apt install gh
 ```
 
 安装完成后，运行登录命令：
